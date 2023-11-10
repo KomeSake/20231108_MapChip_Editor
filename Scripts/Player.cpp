@@ -11,6 +11,11 @@ void Player::Initial()
 	_vel = { 0,0 };
 	_dir = { 0,0 };
 	_speed = 10;
+	_jumpSpeed = 10;
+	_gravity = 0.7f;
+	_acc = { 0,0 };
+	_velMax = 15;
+	_friction = 0.4f;
 
 	_width = 32;
 	_height = 32;
@@ -18,15 +23,19 @@ void Player::Initial()
 	_color = WHITE;
 
 	_hp = 10;
+
+	_isJump = false;
 }
 
-void Player::Move(char keys[], vector<vector<char>> mapData, float bgW, float bgH, float minMapSize)
+void Player::Move(char prekeys[], char keys[], vector<vector<char>> mapData, float bgW, float bgH, float minMapSize)
 {
-	if (keys[DIK_W]) {
+	prekeys;
+	if (keys[DIK_W] && !_isJump) {
+		_isJump = true;
 		_dir.y = 1;
 	}
 	else if (keys[DIK_S]) {
-		_dir.y = -1;
+		//_dir.y = -1;
 	}
 	else {
 		_dir.y = 0;
@@ -40,18 +49,23 @@ void Player::Move(char keys[], vector<vector<char>> mapData, float bgW, float bg
 	else {
 		_dir.x = 0;
 	}
-	float vectorLength = sqrtf(powf(_dir.x, 2) + powf(_dir.y, 2));
-	if (vectorLength != 0) {
-		_dir.x = _dir.x / vectorLength;
-		_dir.y = _dir.y / vectorLength;
-	}
+	//float vectorLength = sqrtf(powf(_dir.x, 2) + powf(_dir.y, 2));
+	//if (vectorLength != 0) {
+	//	_dir.x = _dir.x / vectorLength;
+	//	_dir.y = _dir.y / vectorLength;
+	//}
 
 	//和地图碰撞的检测
 	//先计算出当前所在的格子
 	int playerCheckRow = (int)((bgH - _pos.y) / minMapSize);
 	int playerCheckLine = (int)(_pos.x / minMapSize);
 	//然后X轴开始移动
-	_vel.x = _dir.x * _speed;
+
+	_acc.x = _dir.x * _speed;
+	if (_vel.x<_velMax && _vel.x>-_velMax) {
+		_vel.x += _acc.x;
+	}
+	_vel.x = _vel.x * _friction;
 	_pos.x += _vel.x;
 	//接着算出新的4个角的坐标
 	int checkUp = (int)((bgH - _pos.y - _height / 2) / minMapSize);
@@ -63,16 +77,20 @@ void Player::Move(char keys[], vector<vector<char>> mapData, float bgW, float bg
 		if (mapData[checkUp][checkRight] != '0'
 			|| mapData[checkDown][checkRight] != '0') {
 			_pos.x = playerCheckLine * minMapSize + _width / 2;
+			_vel.x = 0;
 		}
 	}
 	else if (_vel.x < 0) {
 		if (mapData[checkUp][checkLeft] != '0'
 			|| mapData[checkDown][checkLeft] != '0') {
 			_pos.x = playerCheckLine * minMapSize + _width / 2;
+			_vel.x = 0;
 		}
 	}
 	//然后开始Y轴
-	_vel.y = _dir.y * _speed;
+	_acc.y = _dir.y * _jumpSpeed;
+	_vel.y += _acc.y;
+	_vel.y -= _gravity;
 	_pos.y += _vel.y;
 	checkUp = (int)((bgH - _pos.y - _height / 2) / minMapSize);
 	checkDown = (int)((bgH - _pos.y + _height / 2 - 1) / minMapSize);
@@ -82,12 +100,15 @@ void Player::Move(char keys[], vector<vector<char>> mapData, float bgW, float bg
 		if (mapData[checkUp][checkLeft] != '0'
 			|| mapData[checkUp][checkRight] != '0') {
 			_pos.y = bgH - playerCheckRow * minMapSize - _height / 2;
+			_vel.y = 0;
 		}
 	}
 	else if (_vel.y < 0) {
 		if (mapData[checkDown][checkLeft] != '0'
 			|| mapData[checkDown][checkRight] != '0') {
 			_pos.y = bgH - playerCheckRow * minMapSize - _height / 2;
+			_vel.y = 0;
+			_isJump = false;
 		}
 	}
 

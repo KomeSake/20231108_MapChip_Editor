@@ -11,7 +11,12 @@ public:
 	Vector2 _pos;
 	Vector2 _vel;
 	Vector2 _dir;
+	Vector2 _acc;
 	float _speed;
+	float _jumpSpeed;
+	float _gravity;
+	float _velMax;
+	float _friction;
 
 	float _width;
 	float _height;
@@ -20,12 +25,11 @@ public:
 
 	float _hp;
 
-	float _bgHeight;
-	float _bgWidht;
+	bool _isJump;
 
 	Player();
 	void Initial();
-	void Move(char keys[], vector<vector<char>> mapData, float bgW, float bgH, float minMapSize);
+	void Move(char prekeys[], char keys[], vector<vector<char>> mapData, float bgW, float bgH, float minMapSize);
 	void Collide();
 	void Show();
 	void IsDead();

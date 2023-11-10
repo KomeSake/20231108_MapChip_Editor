@@ -51,7 +51,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		case Scene::Start:
 			break;
 		case Scene::Game:
-			PlayerObj->Move(keys, Map::_mapData, bgW, bgH, minMapSize);
+			PlayerObj->Move(preKeys, keys, Map::_mapData, bgW, bgH, minMapSize);
 			CameraObj->Move(PlayerObj->_pos);
 			MyTools::CheckCameraValume(CameraObj->_pos, screenW, screenH);
 			PlayerObj->Collide();

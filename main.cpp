@@ -4,10 +4,12 @@
 #include "Scripts/Camera.h"
 #include "Scripts/Player.h"
 #include "Scripts/Scene.h"
+#include "Scripts/Map.h"
 
 
 const char kWindowTitle[] = "v20230707";
-unsigned int screenW = 640, screenH = 780;
+unsigned int screenW = 800, screenH = 800;
+unsigned int bgW = 50 * 32, bgH = 25 * 32;
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -21,11 +23,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//自分の変数
 	LoadRes::LoadResNovice();
+	Map::LoaclMapLoad(Map::_mapFileName, Map::_mapData);
 
-	Camera* CameraObj = new Camera(screenW, screenH, screenW, screenH);
-	MyTools* ToolsObj = new MyTools();
+	Camera* CameraObj = new Camera(screenW, screenH, bgW, bgH);
 	Player* PlayerObj = new Player();
 	Scene* SceneObj = new Scene();
+	Map* MapObj = new Map();
 
 
 	// ウィンドウの×ボタンが押されるまでループ
@@ -53,6 +56,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			PlayerObj->IsDead();
 
+			MapObj->MapShow(Map::_mapData, 32);
 			PlayerObj->Show();
 
 			SceneObj->SceneStart();

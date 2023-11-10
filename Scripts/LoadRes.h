@@ -25,17 +25,15 @@ public:
 		int listH = 0;//シードの縦幅
 	}structSL;
 
-	//新たなリソースを入れる仕方
-	//1.　宣言：inline static + Sprite/map<int, SpriteList> + 名前
-	//1.1　Spriteは普通のリソース用。map<int, SpriteList>は連番動画とUI用
-	//2.　LoadRes.cppにリソースの要素を書いてください
-	//3.　参照：使いたい所に、LoadRes::名前で参照してください
+	//Player
+	inline static map<int, SpriteList> _sl_playerRun;
 
-	//例：
-	//スライドは一つ目の様子、スライドシートは二つ目の様子、変数名だけを変えるといい
-	inline static Sprite _spriteTemplate;
-	inline static map<int, SpriteList> _spriteListTemplate;
-	inline static map<int, SpriteList> _spriteListTemplate_UI;
+	//Map
+	inline static Sprite _map0;
+	inline static Sprite _map1;
+
+
+
 
 
 

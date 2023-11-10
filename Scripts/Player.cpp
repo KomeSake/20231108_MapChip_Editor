@@ -7,10 +7,10 @@ Player::Player()
 
 void Player::Initial()
 {
-	_pos = { 640 / 2,780 / 2 };
-	_width = 60;
-	_height = 64;
-	_sprite = LoadRes::_spriteListTemplate;
+	_pos = { 32 + 16,32 + 16 };
+	_width = 32;
+	_height = 32;
+	_sprite = LoadRes::_sl_playerRun;
 	_color = WHITE;
 
 	_hp = 10;
@@ -20,16 +20,16 @@ void Player::Move(char keys[])
 {
 	//チェックするために、一旦書いてある
 	if (keys[DIK_W]) {
-		_pos.y += 20;
+		_pos.y += 10;
 	}
 	if (keys[DIK_S]) {
-		_pos.y -= 20;
+		_pos.y -= 10;
 	}
 	if (keys[DIK_A]) {
-		_pos.x -= 20;
+		_pos.x -= 10;
 	}
 	if (keys[DIK_D]) {
-		_pos.x += 20;
+		_pos.x += 10;
 	}
 }
 
@@ -39,7 +39,7 @@ void Player::Collide()
 
 void Player::Show()
 {
-	FrameTexture(_pos.x, _pos.y, _sprite, 0, _color);
+	FrameAnimation(_pos.x, _pos.y, _sprite, 0, _color, 100, 0);
 }
 
 void Player::IsDead()

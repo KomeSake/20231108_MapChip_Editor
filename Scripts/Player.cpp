@@ -8,6 +8,10 @@ Player::Player()
 void Player::Initial()
 {
 	_pos = { 32 + 16,32 + 16 };
+	_vel = { 0,0 };
+	_dir = { 0,0 };
+	_speed = 10;
+
 	_width = 32;
 	_height = 32;
 	_sprite = LoadRes::_sl_playerRun;
@@ -16,22 +20,93 @@ void Player::Initial()
 	_hp = 10;
 }
 
-void Player::Move(char keys[])
+void Player::Move(char keys[], vector<vector<char>> mapData, float bgW, float bgH, float minMapSize)
 {
-	//チェックするために、一旦書いてある
 	if (keys[DIK_W]) {
-		_pos.y += 10;
+		_dir.y = 1;
 	}
-	if (keys[DIK_S]) {
-		_pos.y -= 10;
+	else if (keys[DIK_S]) {
+		_dir.y = -1;
+	}
+	else {
+		_dir.y = 0;
 	}
 	if (keys[DIK_A]) {
-		_pos.x -= 10;
+		_dir.x = -1;
 	}
-	if (keys[DIK_D]) {
-		_pos.x += 10;
+	else if (keys[DIK_D]) {
+		_dir.x = 1;
+	}
+	else {
+		_dir.x = 0;
+	}
+	float vectorLength = sqrtf(powf(_dir.x, 2) + powf(_dir.y, 2));
+	if (vectorLength != 0) {
+		_dir.x = _dir.x / vectorLength;
+		_dir.y = _dir.y / vectorLength;
+	}
+
+	//和地图碰撞的检测
+	//先计算出当前所在的格子
+	int playerCheckRow = (int)((bgH - _pos.y) / minMapSize);
+	int playerCheckLine = (int)(_pos.x / minMapSize);
+	//然后X轴开始移动
+	_vel.x = _dir.x * _speed;
+	_pos.x += _vel.x;
+	//接着算出新的4个角的坐标
+	int checkUp = (int)((bgH - _pos.y - _height / 2) / minMapSize);
+	int checkDown = (int)((bgH - _pos.y + _height / 2 - 1) / minMapSize);
+	int checkLeft = (int)((_pos.x - _width / 2) / minMapSize);
+	int checkRight = (int)((_pos.x + _width / 2 - 1) / minMapSize);
+	//判断是否碰撞了，碰到了就退回去
+	if (_vel.x > 0) {
+		if (mapData[checkUp][checkRight] != '0'
+			|| mapData[checkDown][checkRight] != '0') {
+			_pos.x = playerCheckLine * minMapSize + _width / 2;
+		}
+	}
+	else if (_vel.x < 0) {
+		if (mapData[checkUp][checkLeft] != '0'
+			|| mapData[checkDown][checkLeft] != '0') {
+			_pos.x = playerCheckLine * minMapSize + _width / 2;
+		}
+	}
+	//然后开始Y轴
+	_vel.y = _dir.y * _speed;
+	_pos.y += _vel.y;
+	checkUp = (int)((bgH - _pos.y - _height / 2) / minMapSize);
+	checkDown = (int)((bgH - _pos.y + _height / 2 - 1) / minMapSize);
+	checkLeft = (int)((_pos.x - _width / 2) / minMapSize);
+	checkRight = (int)((_pos.x + _width / 2 - 1) / minMapSize);
+	if (_vel.y > 0) {
+		if (mapData[checkUp][checkLeft] != '0'
+			|| mapData[checkUp][checkRight] != '0') {
+			_pos.y = bgH - playerCheckRow * minMapSize - _height / 2;
+		}
+	}
+	else if (_vel.y < 0) {
+		if (mapData[checkDown][checkLeft] != '0'
+			|| mapData[checkDown][checkRight] != '0') {
+			_pos.y = bgH - playerCheckRow * minMapSize - _height / 2;
+		}
+	}
+
+	//最外围的边界限制
+	if (_pos.x + _width / 2 > bgW) {
+		_pos.x = bgW - _width / 2;
+	}
+	else if (_pos.x - _width / 2 < 0) {
+		_pos.x = _width / 2;
+	}
+	if (_pos.y + _height / 2 > bgH) {
+		_pos.y = bgH - _height / 2;
+	}
+	else if (_pos.y - _height / 2 < 0) {
+		_pos.y = _height / 2;
 	}
 }
+
+
 
 void Player::Collide()
 {

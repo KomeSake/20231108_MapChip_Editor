@@ -8,8 +8,10 @@
 
 
 const char kWindowTitle[] = "v20230707";
-unsigned int screenW = 800, screenH = 800;
-unsigned int bgW = 50 * 32, bgH = 25 * 32;
+const int screenW = 800, screenH = 800;
+const int bgW = 50 * 32, bgH = 25 * 32;
+const float minMapSize = 32;
+
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -49,14 +51,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		case Scene::Start:
 			break;
 		case Scene::Game:
-			PlayerObj->Move(keys);
+			PlayerObj->Move(keys, Map::_mapData, bgW, bgH, minMapSize);
 			CameraObj->Move(PlayerObj->_pos);
 			MyTools::CheckCameraValume(CameraObj->_pos, screenW, screenH);
 			PlayerObj->Collide();
 
 			PlayerObj->IsDead();
 
-			MapObj->MapShow(Map::_mapData, 32);
+			MapObj->MapShow(Map::_mapData, minMapSize);
 			PlayerObj->Show();
 
 			SceneObj->SceneStart();

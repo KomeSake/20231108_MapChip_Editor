@@ -26,7 +26,14 @@ public:
 	}structSL;
 
 	//Player
-	inline static map<int, SpriteList> _sl_playerRun;
+	inline static map<int, SpriteList> _sl_playerIdle_L;
+	inline static map<int, SpriteList> _sl_playerIdle_R;
+	inline static map<int, SpriteList> _sl_playerRun_L;
+	inline static map<int, SpriteList> _sl_playerRun_R;
+
+	//Enemy
+	inline static map<int, SpriteList> _sl_Enemy_L;
+	inline static map<int, SpriteList> _sl_Enemy_R;
 
 	//Map
 	inline static Sprite _map0;

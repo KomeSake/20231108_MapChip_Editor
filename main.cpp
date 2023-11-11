@@ -5,6 +5,7 @@
 #include "Scripts/Player.h"
 #include "Scripts/Scene.h"
 #include "Scripts/Map.h"
+#include "Scripts/Enemy.h"
 
 
 const char kWindowTitle[] = "v20230707";
@@ -31,7 +32,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Player* PlayerObj = new Player();
 	Scene* SceneObj = new Scene();
 	Map* MapObj = new Map();
-
+	EnemyManager* EnemyManagerObj = new EnemyManager();
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -54,11 +55,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			PlayerObj->Move(preKeys, keys, Map::_mapData, bgW, bgH, minMapSize);
 			CameraObj->Move(PlayerObj->_pos);
 			MyTools::CheckCameraValume(CameraObj->_pos, screenW, screenH);
+			EnemyManagerObj->EnemyBornToMap(Map::_mapData, bgW, bgH, minMapSize);
+			EnemyManager::EnemyUpdate(Map::_mapData, bgW, bgH, minMapSize);
+
 			PlayerObj->Collide();
 
 			PlayerObj->IsDead();
 
 			MapObj->MapShow(Map::_mapData, minMapSize);
+			EnemyManager::EnemyUpdateShow();
 			PlayerObj->Show();
 
 			SceneObj->SceneStart();

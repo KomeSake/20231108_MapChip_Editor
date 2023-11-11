@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "MyTools.h"
+#include "Map.h"
 #include <cmath>
 #include <vector>
 using namespace std;

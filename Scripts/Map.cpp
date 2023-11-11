@@ -38,6 +38,7 @@ void Map::MapShow(vector<vector<char>>& mapData, float minMapSize)
 		for (int j = 0; j < mapRow; j++) {
 			switch (mapData[i][j]) {
 			case '0':
+			case 'e':
 				FrameTexture(j * minMapSize + minMapSize / 2, bgH - i * minMapSize - minMapSize / 2, LoadRes::_map0, WHITE);
 				break;
 			case '1':
@@ -46,5 +47,22 @@ void Map::MapShow(vector<vector<char>>& mapData, float minMapSize)
 			}
 		}
 	}
+}
+
+bool Map::IsThrough(vector<vector<char>> mapData, int line, int row)
+{
+	//首先要判断行列是否超过了容器的大小
+	if (line > mapData.size()) {
+		return false;
+	}
+	if (row > mapData[0].size()) {
+		return false;
+	}
+	switch (mapData[line][row]) {
+		//可以穿过的东西多得多，所以只有不可穿过的才记录下来了
+	case '1'://墙壁
+		return false;
+	}
+	return true;
 }
 

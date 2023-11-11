@@ -11,7 +11,7 @@ void Player::Initial()
 	_vel = { 0,0 };
 	_dir = { 0,0 };
 	_speed = 10;
-	_jumpSpeed = 10;
+	_jumpSpeed = 15;
 	_gravity = 0.7f;
 	_acc = { 0,0 };
 	_velMax = 15;
@@ -19,7 +19,7 @@ void Player::Initial()
 
 	_width = 32;
 	_height = 32;
-	_sprite = LoadRes::_sl_playerRun;
+	_sprite = LoadRes::_sl_playerIdle_R;
 	_color = WHITE;
 
 	_hp = 10;
@@ -74,15 +74,15 @@ void Player::Move(char prekeys[], char keys[], vector<vector<char>> mapData, flo
 	int checkRight = (int)((_pos.x + _width / 2 - 1) / minMapSize);
 	//判断是否碰撞了，碰到了就退回去
 	if (_vel.x > 0) {
-		if (mapData[checkUp][checkRight] != '0'
-			|| mapData[checkDown][checkRight] != '0') {
+		if (!Map::IsThrough(mapData, checkUp, checkRight)
+			|| !Map::IsThrough(mapData, checkDown, checkRight)) {
 			_pos.x = playerCheckLine * minMapSize + _width / 2;
 			_vel.x = 0;
 		}
 	}
 	else if (_vel.x < 0) {
-		if (mapData[checkUp][checkLeft] != '0'
-			|| mapData[checkDown][checkLeft] != '0') {
+		if (!Map::IsThrough(mapData, checkUp, checkLeft)
+			|| !Map::IsThrough(mapData, checkDown, checkLeft)) {
 			_pos.x = playerCheckLine * minMapSize + _width / 2;
 			_vel.x = 0;
 		}
@@ -97,15 +97,15 @@ void Player::Move(char prekeys[], char keys[], vector<vector<char>> mapData, flo
 	checkLeft = (int)((_pos.x - _width / 2) / minMapSize);
 	checkRight = (int)((_pos.x + _width / 2 - 1) / minMapSize);
 	if (_vel.y > 0) {
-		if (mapData[checkUp][checkLeft] != '0'
-			|| mapData[checkUp][checkRight] != '0') {
+		if (!Map::IsThrough(mapData, checkUp, checkLeft)
+			|| !Map::IsThrough(mapData, checkUp, checkRight)) {
 			_pos.y = bgH - playerCheckRow * minMapSize - _height / 2;
 			_vel.y = 0;
 		}
 	}
 	else if (_vel.y < 0) {
-		if (mapData[checkDown][checkLeft] != '0'
-			|| mapData[checkDown][checkRight] != '0') {
+		if (!Map::IsThrough(mapData, checkDown, checkLeft)
+			|| !Map::IsThrough(mapData, checkDown, checkRight)) {
 			_pos.y = bgH - playerCheckRow * minMapSize - _height / 2;
 			_vel.y = 0;
 			_isJump = false;
@@ -135,7 +135,18 @@ void Player::Collide()
 
 void Player::Show()
 {
-	FrameAnimation(_pos.x, _pos.y, _sprite, 0, _color, 100, 0);
+	if (_vel.x < 0.5f && _vel.x >= 0) {
+		FrameAnimation(_pos.x, _pos.y, LoadRes::_sl_playerIdle_R, 0, _color, 300, 0);
+	}
+	else if (_vel.x > -0.5f && _vel.x <= 0) {
+		FrameAnimation(_pos.x, _pos.y, LoadRes::_sl_playerIdle_L, 0, _color, 300, 0);
+	}
+	else if (_vel.x > 0.5f) {
+		FrameAnimation(_pos.x, _pos.y, LoadRes::_sl_playerRun_R, 0, _color, 100, 0);
+	}
+	else if (_vel.x < -0.5f) {
+		FrameAnimation(_pos.x, _pos.y, LoadRes::_sl_playerRun_L, 0, _color, 100, 0);
+	}
 }
 
 void Player::IsDead()

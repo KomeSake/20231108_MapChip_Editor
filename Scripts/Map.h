@@ -19,5 +19,6 @@ public:
 
 	static void LoaclMapLoad(string name, vector<vector<char>>& mapData);
 	void MapShow(vector<vector<char>>& mapData, float minMapSize);
+	static bool IsThrough(vector<vector<char>> mapData, int line, int row);
 };
 

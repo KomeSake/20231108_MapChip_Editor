@@ -7,12 +7,49 @@ void LoadRes::LoadResNovice()
 	int w = 0, h = 0, x = 0, y = 0;
 
 	//スライドシート
+	//Player
+	for (int i = 0; i < 6; i++) {
+		path = Novice::LoadTexture("./Resources/Textures/Player_idle_L.png");
+		w = 32, h = 32;
+		x = i * w, y = 0;
+		listW = 192, listH = 32;
+		_sl_playerIdle_L[i] = { path,x,y,w,h,listW,listH };
+	}
+	for (int i = 0; i < 6; i++) {
+		path = Novice::LoadTexture("./Resources/Textures/Player_idle_R.png");
+		w = 32, h = 32;
+		x = i * w, y = 0;
+		listW = 192, listH = 32;
+		_sl_playerIdle_R[i] = { path,x,y,w,h,listW,listH };
+	}
 	for (int i = 0; i < 5; i++) {
-		path = Novice::LoadTexture("./Resources/Textures/Player_run.png");
+		path = Novice::LoadTexture("./Resources/Textures/Player_run_L.png");
 		w = 32, h = 32;
 		x = i * w, y = 0;
 		listW = 160, listH = 32;
-		_sl_playerRun[i] = { path,x,y,w,h,listW,listH };
+		_sl_playerRun_L[i] = { path,x,y,w,h,listW,listH };
+	}
+	for (int i = 0; i < 5; i++) {
+		path = Novice::LoadTexture("./Resources/Textures/Player_run_R.png");
+		w = 32, h = 32;
+		x = i * w, y = 0;
+		listW = 160, listH = 32;
+		_sl_playerRun_R[i] = { path,x,y,w,h,listW,listH };
+	}
+	//Enemy
+	for (int i = 0; i < 5; i++) {
+		path = Novice::LoadTexture("./Resources/Textures/Enemy1_L.png");
+		w = 32, h = 32;
+		x = i * w, y = 0;
+		listW = 160, listH = 32;
+		_sl_Enemy_L[i] = { path,x,y,w,h,listW,listH };
+	}
+	for (int i = 0; i < 5; i++) {
+		path = Novice::LoadTexture("./Resources/Textures/Enemy1_R.png");
+		w = 32, h = 32;
+		x = i * w, y = 0;
+		listW = 160, listH = 32;
+		_sl_Enemy_R[i] = { path,x,y,w,h,listW,listH };
 	}
 
 	//map

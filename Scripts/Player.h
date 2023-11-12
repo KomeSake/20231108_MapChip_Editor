@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "MyTools.h"
 #include "Map.h"
+#include "Enemy.h"
 #include <cmath>
 #include <vector>
 using namespace std;
@@ -25,6 +26,7 @@ public:
 	unsigned int _color;
 
 	float _hp;
+	float _damage;
 
 	bool _isJump;
 

@@ -46,11 +46,23 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓更新処理ここから
 		///
+		int mouseX{}, mouseY{};
+		Novice::GetMousePosition(&mouseX, &mouseY);
+
 		switch (SceneObj->_sceneIndex) {
 		case Scene::Loading:
+			EnemyManager::_enemyUpdateVector.clear();
+			PlayerObj = new Player();
+			SceneObj->_sceneIndex = SceneObj->Game;
 			break;
+
 		case Scene::Start:
+			CameraObj = new Camera(screenW, screenH, bgW, bgH);
+			MyTools::CheckCameraValume(CameraObj->_pos, screenW, screenH);
+			MapObj->MapShow(Map::_mapData, minMapSize);
+			SceneObj->SceneStart(preKeys, keys);
 			break;
+
 		case Scene::Game:
 			PlayerObj->Move(preKeys, keys, Map::_mapData, bgW, bgH, minMapSize);
 			CameraObj->Move(PlayerObj->_pos);
@@ -61,14 +73,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			PlayerObj->Collide();
 
 			PlayerObj->IsDead();
+			if (PlayerObj->_hp <= 0) {
+				SceneObj->_sceneIndex = SceneObj->GameOver;
+			}
 
 			MapObj->MapShow(Map::_mapData, minMapSize);
 			EnemyManager::EnemyUpdateShow();
 			PlayerObj->Show();
-
-			SceneObj->SceneStart();
 			break;
+
 		case Scene::GameOver:
+			EnemyManager::EnemyUpdate(Map::_mapData, bgW, bgH, minMapSize);
+			MapObj->MapShow(Map::_mapData, minMapSize);
+			EnemyManager::EnemyUpdateShow();
+			PlayerObj->Show();
+			SceneObj->SceneGameOver(mouseX, mouseY, preKeys, keys);
 			break;
 		}
 		///

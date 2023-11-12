@@ -23,6 +23,7 @@ public:
 	unsigned int _color;
 
 	float _hp;
+	float _damage;
 
 	bool _isLeft;
 	bool _isJump;

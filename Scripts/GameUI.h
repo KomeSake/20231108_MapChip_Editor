@@ -11,7 +11,7 @@ public:
 	unsigned int _color;
 protected:
 	//UIの描画関数は左上から描画する
-	void UITexture(float x, float y, int sprite, unsigned int color);
+	void UITexture(float x, float y, LoadRes::Sprite sprite, unsigned int color);
 	void UITexture(float x, float y, map<int, LoadRes::SpriteList> sprite, int index, unsigned int color);
 	void UIAnimation(float x, float y, map<int, LoadRes::SpriteList> sprite, float angle, int frameTime, int index);
 	//ストップウォッチ(３０番)
@@ -27,10 +27,21 @@ protected:
 	bool _frame_isTimeOpen[31] = { 0 };
 };
 
-class UI_player :
+class UI_Start :
 	public GameUI
 {
 public:
-	UI_player();
-	void UIOpen();
+	bool _isStart;
+	UI_Start();
+	void UIOpen(char prekeys[], char keys[]);
+};
+
+class UI_GameOver :
+	public GameUI
+{
+public:
+	bool _isRestart;//是否重试
+	bool _isBackMenu;//是否回到主菜单
+	UI_GameOver();
+	void UIOpen(Vector2 mousePos, char prekeys[], char keys[]);
 };

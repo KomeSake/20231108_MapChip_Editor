@@ -22,6 +22,7 @@ void Enemy::Initial()
 	_color = WHITE;
 
 	_hp = 2;
+	_damage = 1;
 
 	_isLeft = true;
 	_isJump = false;
@@ -117,6 +118,13 @@ void Enemy::Move(vector<vector<char>> mapData, float bgW, float bgH, float minMa
 	}
 }
 
+void Enemy::Dead()
+{
+	if (_hp <= 0) {
+		EnemyManager::ReleaseEnemy(this);
+	}
+}
+
 void Enemy::Show()
 {
 	if (_vel.x > 0) {
@@ -137,6 +145,7 @@ void EnemyManager::EnemyUpdate(vector<vector<char>>mapData, float bgW, float bgH
 {
 	for (Enemy* it : _enemyUpdateVector) {
 		it->Move(mapData, bgW, bgH, minSize);
+		it->Dead();
 	}
 }
 

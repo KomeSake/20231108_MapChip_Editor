@@ -13,11 +13,11 @@ public:
 	}_sceneIndex;
 
 	Scene();
-	void SceneStart();
+	void SceneStart(char prekeys[], char keys[]);
 	void SceneGame();
-	void SceneGameOver();
+	void SceneGameOver(int mouseX, int mouseY, char prekeys[], char keys[]);
 
-
-	UI_player* UI_playerObj = new UI_player();
+	UI_Start* UI_StartObj;
+	UI_GameOver* UI_GameOverObj;
 };
 

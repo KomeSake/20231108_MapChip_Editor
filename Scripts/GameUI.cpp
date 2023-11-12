@@ -1,8 +1,8 @@
 ﻿#include "GameUI.h"
 
-void GameUI::UITexture(float x, float y, int sprite, unsigned int color)
+void GameUI::UITexture(float x, float y, LoadRes::Sprite sprite, unsigned int color)
 {
-	Novice::DrawSprite((int)x, (int)y, sprite, 1, 1, 0, color);
+	Novice::DrawSprite((int)x, (int)y, sprite.path, 1, 1, 0, color);
 }
 
 void GameUI::UITexture(float x, float y, std::map<int, LoadRes::SpriteList> sprite, int index, unsigned int color)
@@ -57,14 +57,68 @@ int GameUI::FrameTimers(int milli, int index)
 	return 0;
 }
 
-UI_player::UI_player()
+UI_GameOver::UI_GameOver()
 {
+	_width = 800;
+	_height = 800;
 	_pos = { 0,0 };
-	_width = 0;
-	_height = 0;
 	_color = WHITE;
+	_isRestart = false;
+	_isBackMenu = false;
 }
 
-void UI_player::UIOpen()
+void UI_GameOver::UIOpen(Vector2 mousePos, char prekeys[], char keys[])
 {
+	mousePos;
+
+	Novice::DrawBox(0, 0, 800, 800, 0, 0x832f2690, kFillModeSolid);
+	UITexture(_pos.x - 20, _pos.y + 100, LoadRes::_slUI_screenDead, 0, _color);
+	UITexture(_pos.x + 400, _pos.y + 100, LoadRes::_slUI_screenDead, 1, _color);
+
+	UITexture(_pos.x + 80, _pos.y + 600, LoadRes::_spUI_restart, _color);
+
+	if (!prekeys[DIK_SPACE] && keys[DIK_SPACE]) {
+		_isRestart = true;
+	}
+
+
+
+	//UITexture(_pos.x + 500, _pos.y + 600, LoadRes::_slUI_screenDead, 2, _color);
+	//UITexture(_pos.x + 140, _pos.y + 600, LoadRes::_slUI_screenDead, 3, _color);
+	//UITexture(_pos.x + 140 + 50, _pos.y + 600 + 10, LoadRes::_slUI_screenDead, 5, _color);
+	//UITexture(_pos.x + 500 + 30, _pos.y + 600 + 10, LoadRes::_slUI_screenDead, 6, _color);
+	//if (mousePos.x > _pos.x + 500 && mousePos.x < _pos.x + 500 + 171
+	//	&& _pos.y + mousePos.y > 600 && mousePos.y < _pos.y + 600 + 62) {
+	//	UITexture(_pos.x + 500, _pos.y + 600, LoadRes::_slUI_screenDead, 4, _color);
+	//	if (Novice::IsTriggerMouse(0)) {
+	//		_isRestart = true;
+	//	}
+	//}
+	//if (mousePos.x > _pos.x + 140 && mousePos.x < _pos.x + 140 + 171
+	//	&& _pos.y + mousePos.y > 600 && mousePos.y < _pos.y + 600 + 62) {
+	//	UITexture(_pos.x + 140, _pos.y + 600, LoadRes::_slUI_screenDead, 4, _color);
+	//	if (Novice::IsTriggerMouse(0)) {
+	//		_isBackMenu = true;
+	//	}
+	//}
+}
+
+UI_Start::UI_Start()
+{
+	_width = 800;
+	_height = 800;
+	_pos = { 0,0 };
+	_color = WHITE;
+	_isStart = false;
+}
+
+void UI_Start::UIOpen(char prekeys[], char keys[])
+{
+	Novice::DrawBox(0, 0, 800, 800, 0, 0xffab9190, kFillModeSolid);
+	UITexture(_pos.x + 50, _pos.y + 120, LoadRes::_spUI_title, _color);
+	UITexture(_pos.x + 80, _pos.y + 600, LoadRes::_spUI_restart, _color);
+
+	if (!prekeys[DIK_SPACE] && keys[DIK_SPACE]) {
+		_isStart = true;
+	}
 }

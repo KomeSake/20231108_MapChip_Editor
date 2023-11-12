@@ -53,6 +53,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		case Scene::Loading:
 			EnemyManager::_enemyUpdateVector.clear();
 			PlayerObj = new Player();
+			CameraObj = new Camera(screenW, screenH, bgW, bgH);
 			SceneObj->_sceneIndex = SceneObj->Game;
 			break;
 
@@ -72,7 +73,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			PlayerObj->Collide();
 
-			PlayerObj->IsDead();
+			PlayerObj->Dead();
 			if (PlayerObj->_hp <= 0) {
 				SceneObj->_sceneIndex = SceneObj->GameOver;
 			}
@@ -80,9 +81,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			MapObj->MapShow(Map::_mapData, minMapSize);
 			EnemyManager::EnemyUpdateShow();
 			PlayerObj->Show();
+			SceneObj->SceneGame(int(PlayerObj->_hp));
 			break;
 
 		case Scene::GameOver:
+			PlayerObj->Dead();
 			EnemyManager::EnemyUpdate(Map::_mapData, bgW, bgH, minMapSize);
 			MapObj->MapShow(Map::_mapData, minMapSize);
 			EnemyManager::EnemyUpdateShow();
@@ -95,8 +98,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 
 		//Debug情報
-		Novice::ScreenPrintf(10, 10, "Player(%d,%d)", int(PlayerObj->_pos.x), int(PlayerObj->_pos.y));
-		Novice::ScreenPrintf(10, 30, "Camera(%d,%d)", int(CameraObj->_pos.x), int(CameraObj->_pos.y));
+		//Novice::ScreenPrintf(10, 10, "Player(%d,%d)", int(PlayerObj->_pos.x), int(PlayerObj->_pos.y));
+		//Novice::ScreenPrintf(10, 30, "Camera(%d,%d)", int(CameraObj->_pos.x), int(CameraObj->_pos.y));
 
 		// フレームの終了
 		Novice::EndFrame();

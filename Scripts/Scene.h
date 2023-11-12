@@ -14,10 +14,11 @@ public:
 
 	Scene();
 	void SceneStart(char prekeys[], char keys[]);
-	void SceneGame();
+	void SceneGame(int playerHp);
 	void SceneGameOver(int mouseX, int mouseY, char prekeys[], char keys[]);
 
 	UI_Start* UI_StartObj;
+	UI_Game* UI_GameObj;
 	UI_GameOver* UI_GameOverObj;
 };
 

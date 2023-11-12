@@ -36,6 +36,14 @@ public:
 	void UIOpen(char prekeys[], char keys[]);
 };
 
+class UI_Game :
+	public GameUI
+{
+public:
+	UI_Game();
+	void UIOpen(int hp);
+};
+
 class UI_GameOver :
 	public GameUI
 {

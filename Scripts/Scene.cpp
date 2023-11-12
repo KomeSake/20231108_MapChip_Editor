@@ -4,6 +4,7 @@ Scene::Scene()
 {
 	_sceneIndex = Start;
 	UI_StartObj = new UI_Start();
+	UI_GameObj = new UI_Game();
 	UI_GameOverObj = new UI_GameOver();
 }
 
@@ -14,6 +15,11 @@ void Scene::SceneStart(char prekeys[], char keys[])
 		_sceneIndex = Loading;
 		UI_StartObj->_isStart = false;
 	}
+}
+
+void Scene::SceneGame(int playerHp)
+{
+	UI_GameObj->UIOpen(playerHp);
 }
 
 void Scene::SceneGameOver(int mouseX, int mouseY, char prekeys[], char keys[])

@@ -122,3 +122,69 @@ void UI_Start::UIOpen(char prekeys[], char keys[])
 		_isStart = true;
 	}
 }
+
+UI_Game::UI_Game()
+{
+	_width = 800;
+	_height = 800;
+	_pos = { 10,10 };//以左上角的Hp为标准
+	_color = WHITE;
+}
+
+void UI_Game::UIOpen(int hp)
+{
+	UITexture(_pos.x, _pos.y, LoadRes::_spUI_hpBox, _color);
+	switch (hp)
+	{
+	case 10:
+		UITexture(_pos.x + 8, _pos.y + 8, LoadRes::_spUI_hp, _color);
+		UITexture(_pos.x + 46, _pos.y + 8, LoadRes::_spUI_hp, _color);
+		UITexture(_pos.x + 84, _pos.y + 8, LoadRes::_spUI_hp, _color);
+		UITexture(_pos.x + 122, _pos.y + 8, LoadRes::_spUI_hp, _color);
+		UITexture(_pos.x + 160, _pos.y + 8, LoadRes::_spUI_hp, _color);
+		break;
+	case 9:
+		UITexture(_pos.x + 8, _pos.y + 8, LoadRes::_spUI_hp, _color);
+		UITexture(_pos.x + 46, _pos.y + 8, LoadRes::_spUI_hp, _color);
+		UITexture(_pos.x + 84, _pos.y + 8, LoadRes::_spUI_hp, _color);
+		UITexture(_pos.x + 122, _pos.y + 8, LoadRes::_spUI_hp, _color);
+		UITexture(_pos.x + 160, _pos.y + 8, LoadRes::_spUI_hp2, _color);
+		break;
+	case 8:
+		UITexture(_pos.x + 8, _pos.y + 8, LoadRes::_spUI_hp, _color);
+		UITexture(_pos.x + 46, _pos.y + 8, LoadRes::_spUI_hp, _color);
+		UITexture(_pos.x + 84, _pos.y + 8, LoadRes::_spUI_hp, _color);
+		UITexture(_pos.x + 122, _pos.y + 8, LoadRes::_spUI_hp, _color);
+		break;
+	case 7:
+		UITexture(_pos.x + 8, _pos.y + 8, LoadRes::_spUI_hp, _color);
+		UITexture(_pos.x + 46, _pos.y + 8, LoadRes::_spUI_hp, _color);
+		UITexture(_pos.x + 84, _pos.y + 8, LoadRes::_spUI_hp, _color);
+		UITexture(_pos.x + 122, _pos.y + 8, LoadRes::_spUI_hp2, _color);
+		break;
+	case 6:
+		UITexture(_pos.x + 8, _pos.y + 8, LoadRes::_spUI_hp, _color);
+		UITexture(_pos.x + 46, _pos.y + 8, LoadRes::_spUI_hp, _color);
+		UITexture(_pos.x + 84, _pos.y + 8, LoadRes::_spUI_hp, _color);
+		break;
+	case 5:
+		UITexture(_pos.x + 8, _pos.y + 8, LoadRes::_spUI_hp, _color);
+		UITexture(_pos.x + 46, _pos.y + 8, LoadRes::_spUI_hp, _color);
+		UITexture(_pos.x + 84, _pos.y + 8, LoadRes::_spUI_hp2, _color);
+		break;
+	case 4:
+		UITexture(_pos.x + 8, _pos.y + 8, LoadRes::_spUI_hp, _color);
+		UITexture(_pos.x + 46, _pos.y + 8, LoadRes::_spUI_hp, _color);
+		break;
+	case 3:
+		UITexture(_pos.x + 8, _pos.y + 8, LoadRes::_spUI_hp, _color);
+		UITexture(_pos.x + 46, _pos.y + 8, LoadRes::_spUI_hp2, _color);
+		break;
+	case 2:
+		UITexture(_pos.x + 8, _pos.y + 8, LoadRes::_spUI_hp, _color);
+		break;
+	case 1:
+		UITexture(_pos.x + 8, _pos.y + 8, LoadRes::_spUI_hp2, _color);
+		break;
+	}
+}

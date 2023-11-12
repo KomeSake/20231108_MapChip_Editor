@@ -44,6 +44,9 @@ public:
 	inline static Sprite _spUI_title;
 	inline static Sprite _spUI_start;
 	inline static Sprite _spUI_restart;
+	inline static Sprite _spUI_hp;
+	inline static Sprite _spUI_hp2;
+	inline static Sprite _spUI_hpBox;
 
 
 

@@ -21,11 +21,13 @@ void Player::Initial()
 	_height = 32;
 	_sprite = LoadRes::_sl_playerIdle_R;
 	_color = WHITE;
+	_rad = 0;
 
-	_hp = 10;
+	_hp = 1;
 	_damage = 2;
 
 	_isJump = false;
+	_isGod = false;
 }
 
 void Player::Move(char prekeys[], char keys[], vector<vector<char>> mapData, float bgW, float bgH, float minMapSize)
@@ -154,43 +156,60 @@ void Player::Collide()
 		//不然就正常判断碰撞
 		else {
 			float length = sqrtf(powf(it->_pos.x - _pos.x, 2) + powf(it->_pos.y - _pos.y, 2));
-			if (length < it->_width / 2 + _width / 2) {
+			if (length < it->_width / 2 + _width / 2
+				&& !_isGod) {
 				_hp -= it->_damage;
 				_vel.y = _jumpSpeed * 0.7f;
 				_vel.x = it->_dir.x * _speed * 2.f * -1;
 				_color = RED;
+				_isGod = true;
 				break;
 			}
 		}
+	}
+
+	//为了不触发多次碰撞伤害，给玩家一个无敌时间
+	if (MyTimers(500, 1) && _isGod) {
+		_isGod = false;
 	}
 }
 
 void Player::Show()
 {
 	//受伤会变成红色，所以要一段时间后把时间变回来
-	if (_color != WHITE) {
+	if (_color != WHITE && !_isDead) {
 		if (MyTimers(500, 0)) {
 			_color = WHITE;
 		}
 	}
 
 	if (_vel.x < 0.5f && _vel.x >= 0) {
-		FrameAnimation(_pos.x, _pos.y, LoadRes::_sl_playerIdle_R, 0, _color, 300, 0);
+		FrameAnimation(_pos.x, _pos.y, LoadRes::_sl_playerIdle_R, _rad, _color, 300, 0);
 	}
 	else if (_vel.x > -0.5f && _vel.x <= 0) {
-		FrameAnimation(_pos.x, _pos.y, LoadRes::_sl_playerIdle_L, 0, _color, 300, 0);
+		FrameAnimation(_pos.x, _pos.y, LoadRes::_sl_playerIdle_L, _rad, _color, 300, 0);
 	}
 	else if (_vel.x > 0.5f) {
-		FrameAnimation(_pos.x, _pos.y, LoadRes::_sl_playerRun_R, 0, _color, 100, 0);
+		FrameAnimation(_pos.x, _pos.y, LoadRes::_sl_playerRun_R, _rad, _color, 100, 0);
 	}
 	else if (_vel.x < -0.5f) {
-		FrameAnimation(_pos.x, _pos.y, LoadRes::_sl_playerRun_L, 0, _color, 100, 0);
+		FrameAnimation(_pos.x, _pos.y, LoadRes::_sl_playerRun_L, _rad, _color, 100, 0);
 	}
 }
 
-void Player::IsDead()
+void Player::Dead()
 {
-	if (_hp <= 0) {
-		_color = GREEN;
+	if (_hp <= 0 && !_isDead) {
+		_vel.y = _jumpSpeed * 0.7f;
+		_isDead = true;
+	}
+	if (_isDead) {
+		_color = RED;
+		_vel.x = _speed * 0.5f;
+		_pos.x += _vel.x;
+		_vel.y -= _gravity;
+		_pos.y += _vel.y;
+
+		_rad += _vel.y * 0.01f;
 	}
 }

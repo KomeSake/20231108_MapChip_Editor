@@ -77,4 +77,8 @@ void LoadRes::LoadResNovice()
 	_spUI_title = { Novice::LoadTexture("./Resources/Textures/UI/title.png"),701,301 };
 	_spUI_start = { Novice::LoadTexture("./Resources/Textures/UI/start.png"),583,67 };
 	_spUI_restart = { Novice::LoadTexture("./Resources/Textures/UI/restart.png"),647,67 };
+
+	_spUI_hp = { Novice::LoadTexture("./Resources/Textures/UI/hp.png"),34,28 };
+	_spUI_hp2 = { Novice::LoadTexture("./Resources/Textures/UI/hp2.png"),34,28 };
+	_spUI_hpBox = { Novice::LoadTexture("./Resources/Textures/UI/hpBox.png"),204,44 };
 }

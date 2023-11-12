@@ -23,7 +23,7 @@ void Player::Initial()
 	_color = WHITE;
 	_rad = 0;
 
-	_hp = 1;
+	_hp = 10;
 	_damage = 2;
 
 	_isJump = false;
@@ -150,6 +150,7 @@ void Player::Collide()
 				it->_hp -= _damage;
 				//踩中了自己还会跳一下
 				_vel.y = _jumpSpeed;
+				Novice::PlayAudio(LoadRes::_audio_attack, 0, 1);
 				continue;
 			}
 		}

@@ -121,6 +121,7 @@ void Enemy::Move(vector<vector<char>> mapData, float bgW, float bgH, float minMa
 void Enemy::Dead()
 {
 	if (_hp <= 0) {
+		Novice::PlayAudio(LoadRes::_audio_enemyDead, 0, 1);
 		EnemyManager::ReleaseEnemy(this);
 	}
 }

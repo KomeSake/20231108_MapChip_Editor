@@ -49,6 +49,11 @@ public:
 	inline static Sprite _spUI_hp2;
 	inline static Sprite _spUI_hpBox;
 
+	//Sounds
+	inline static int _audio_bgm;
+	inline static int _audio_keySpace;
+	inline static int _audio_attack;
+	inline static int _audio_enemyDead;
 
 
 

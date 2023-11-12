@@ -27,6 +27,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//自分の変数
 	LoadRes::LoadResNovice();
 	Map::LoaclMapLoad(Map::_mapFileName, Map::_mapData);
+	int bgmLoopHandle = 0;//为了循环的Bgm而弄的
 
 	Camera* CameraObj = new Camera(screenW, screenH, bgW, bgH);
 	Player* PlayerObj = new Player();
@@ -51,6 +52,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		switch (SceneObj->_sceneIndex) {
 		case Scene::Loading:
+			Novice::StopAudio(bgmLoopHandle);
+
 			EnemyManager::_enemyUpdateVector.clear();
 			PlayerObj = new Player();
 			CameraObj = new Camera(screenW, screenH, bgW, bgH);
@@ -82,6 +85,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			EnemyManager::EnemyUpdateShow();
 			PlayerObj->Show();
 			SceneObj->SceneGame(int(PlayerObj->_hp));
+
+			if (!Novice::IsPlayingAudio(bgmLoopHandle) || bgmLoopHandle == -1) {
+				bgmLoopHandle = Novice::PlayAudio(LoadRes::_audio_bgm, 0, 1);
+			}
 			break;
 
 		case Scene::GameOver:

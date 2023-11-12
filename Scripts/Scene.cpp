@@ -12,8 +12,10 @@ void Scene::SceneStart(char prekeys[], char keys[])
 {
 	UI_StartObj->UIOpen(prekeys, keys);
 	if (UI_StartObj->_isStart) {
-		_sceneIndex = Loading;
 		UI_StartObj->_isStart = false;
+		Novice::PlayAudio(LoadRes::_audio_keySpace, 0, 1);
+
+		_sceneIndex = Loading;
 	}
 }
 
@@ -26,11 +28,12 @@ void Scene::SceneGameOver(int mouseX, int mouseY, char prekeys[], char keys[])
 {
 	UI_GameOverObj->UIOpen(Vector2{ float(mouseX),float(mouseY) }, prekeys, keys);
 	if (UI_GameOverObj->_isRestart) {
-		_sceneIndex = Loading;
 		UI_GameOverObj->_isRestart = false;
+		Novice::PlayAudio(LoadRes::_audio_keySpace, 0, 1);
+		_sceneIndex = Loading;
 	}
 	if (UI_GameOverObj->_isBackMenu) {
-		_sceneIndex = Start;
 		UI_GameOverObj->_isBackMenu = false;
+		_sceneIndex = Start;
 	}
 }

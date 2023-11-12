@@ -88,4 +88,10 @@ void LoadRes::LoadResNovice()
 	_spUI_hp = { Novice::LoadTexture("./Resources/Textures/UI/hp.png"),34,28 };
 	_spUI_hp2 = { Novice::LoadTexture("./Resources/Textures/UI/hp2.png"),34,28 };
 	_spUI_hpBox = { Novice::LoadTexture("./Resources/Textures/UI/hpBox.png"),204,44 };
+
+	//Sounds
+	_audio_bgm = Novice::LoadAudio("./Resources/Sounds/MusMus-BGM-173.mp3");
+	_audio_keySpace = Novice::LoadAudio("./Resources/Sounds/btn07.mp3");
+	_audio_attack = Novice::LoadAudio("./Resources/Sounds/maou_se_battle16.mp3");
+	_audio_enemyDead = Novice::LoadAudio("./Resources/Sounds/cncl06.mp3");
 }

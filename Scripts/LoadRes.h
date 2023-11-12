@@ -38,6 +38,7 @@ public:
 	//Map
 	inline static Sprite _map0;
 	inline static Sprite _map1;
+	inline static map<int, SpriteList> _sl_map;
 
 	//UI
 	inline static map<int, SpriteList> _slUI_screenDead;

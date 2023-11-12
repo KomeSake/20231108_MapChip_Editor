@@ -39,10 +39,11 @@ void Map::MapShow(vector<vector<char>>& mapData, float minMapSize)
 			switch (mapData[i][j]) {
 			case '0':
 			case 'e':
-				FrameTexture(j * minMapSize + minMapSize / 2, bgH - i * minMapSize - minMapSize / 2, LoadRes::_map0, WHITE);
+				FrameTexture(j * minMapSize + minMapSize / 2, bgH - i * minMapSize - minMapSize / 2, LoadRes::_sl_map, 0, WHITE);
 				break;
 			case '1':
-				FrameTexture(j * minMapSize + minMapSize / 2, bgH - i * minMapSize - minMapSize / 2, LoadRes::_map1, WHITE);
+				//FrameTexture(j * minMapSize + minMapSize / 2, bgH - i * minMapSize - minMapSize / 2, LoadRes::_map1, WHITE);
+				FrameTexture(j * minMapSize + minMapSize / 2, bgH - i * minMapSize - minMapSize / 2, LoadRes::_sl_map, 1, WHITE);
 				break;
 			}
 		}

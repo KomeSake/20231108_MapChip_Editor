@@ -55,6 +55,13 @@ void LoadRes::LoadResNovice()
 	//map
 	_map0 = { Novice::LoadTexture("./Resources/Textures/map_0.png"),32,32 };
 	_map1 = { Novice::LoadTexture("./Resources/Textures/map_1.png"),32,32 };
+	for (int i = 0; i < 4; i++) {
+		path = Novice::LoadTexture("./Resources/Textures/map_list.png");
+		w = 32, h = 32;
+		x = i * w, y = 0;
+		listW = 128, listH = 32;
+		_sl_map[i] = { path,x,y,w,h,listW,listH };
+	}
 
 	//UI
 	path = Novice::LoadTexture("./Resources/Textures/UI/Dead/List.png");

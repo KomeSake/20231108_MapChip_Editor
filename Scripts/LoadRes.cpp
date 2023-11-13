@@ -53,13 +53,11 @@ void LoadRes::LoadResNovice()
 	}
 
 	//map
-	_map0 = { Novice::LoadTexture("./Resources/Textures/map_0.png"),32,32 };
-	_map1 = { Novice::LoadTexture("./Resources/Textures/map_1.png"),32,32 };
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 2; i++) {
 		path = Novice::LoadTexture("./Resources/Textures/map_list.png");
 		w = 32, h = 32;
 		x = i * w, y = 0;
-		listW = 128, listH = 32;
+		listW = 64, listH = 32;
 		_sl_map[i] = { path,x,y,w,h,listW,listH };
 	}
 
@@ -94,4 +92,23 @@ void LoadRes::LoadResNovice()
 	_audio_keySpace = Novice::LoadAudio("./Resources/Sounds/btn07.mp3");
 	_audio_attack = Novice::LoadAudio("./Resources/Sounds/maou_se_battle16.mp3");
 	_audio_enemyDead = Novice::LoadAudio("./Resources/Sounds/cncl06.mp3");
+}
+
+void LoadRes::UnLoadResNovice()
+{
+	const int bufMax = 10;
+	int buf[bufMax]{};
+	buf[0] = _sl_map[0].path;
+	buf[1] = _sl_Enemy_L[0].path;
+	buf[2] = _sl_Enemy_R[0].path;
+	buf[3] = _sl_playerIdle_L[0].path;
+	buf[4] = _sl_playerIdle_R[0].path;
+	buf[5] = _sl_playerRun_L[0].path;
+	buf[6] = _sl_playerRun_R[0].path;
+
+	for (int i = 0; i < bufMax; i++) {
+		if (buf[i] != NULL) {
+			Novice::UnloadTexture(buf[i]);
+		}
+	}
 }

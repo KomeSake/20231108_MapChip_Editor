@@ -36,8 +36,6 @@ public:
 	inline static map<int, SpriteList> _sl_Enemy_R;
 
 	//Map
-	inline static Sprite _map0;
-	inline static Sprite _map1;
 	inline static map<int, SpriteList> _sl_map;
 
 	//UI
@@ -74,5 +72,6 @@ public:
 
 
 	static void LoadResNovice();//リソースをLoadする関数。最初に参照しなければならない
+	static void UnLoadResNovice();//UnLoadしたいテクスチャを保存している（HotLoad機能の為）
 };
 

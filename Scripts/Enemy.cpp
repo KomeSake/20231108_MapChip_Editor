@@ -128,7 +128,7 @@ void Enemy::Dead()
 
 void Enemy::Show()
 {
-	if (_vel.x > 0) {
+	if (_vel.x >= 0) {
 		FrameAnimation(_pos.x, _pos.y, LoadRes::_sl_Enemy_R, 0, _color, 100, 0);
 	}
 	else if (_vel.x < 0) {

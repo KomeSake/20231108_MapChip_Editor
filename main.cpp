@@ -68,6 +68,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			break;
 
 		case Scene::Game:
+			//Reload
+			if (!preKeys[DIK_R] && keys[DIK_R]) {
+				LoadRes::UnLoadResNovice();
+				LoadRes::LoadResNovice();
+				Map::_mapData.clear();
+				Map::LoaclMapLoad(Map::_mapFileName, Map::_mapData);
+			}
+
 			PlayerObj->Move(preKeys, keys, Map::_mapData, bgW, bgH, minMapSize);
 			CameraObj->Move(PlayerObj->_pos);
 			MyTools::CheckCameraValume(CameraObj->_pos, screenW, screenH);

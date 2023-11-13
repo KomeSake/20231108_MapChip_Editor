@@ -52,6 +52,9 @@ public:
 	inline static int _audio_keySpace;
 	inline static int _audio_attack;
 	inline static int _audio_enemyDead;
+	inline static int _audio_enemyJump;
+	inline static int _audio_playerDead;
+	inline static int _audio_jump;
 
 
 

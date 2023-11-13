@@ -34,6 +34,7 @@ void Player::Move(char prekeys[], char keys[], vector<vector<char>> mapData, flo
 {
 	prekeys;
 	if (keys[DIK_W] && !_isJump) {
+		Novice::PlayAudio(LoadRes::_audio_jump, 0, 1);
 		_isJump = true;
 		_dir.y = 1;
 	}
@@ -205,6 +206,7 @@ void Player::Dead()
 		_isDead = true;
 	}
 	if (_isDead) {
+		Novice::PlayAudio(LoadRes::_audio_playerDead, 0, 1);
 		_color = RED;
 		_vel.x = _speed * 0.5f;
 		_pos.x += _vel.x;

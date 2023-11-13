@@ -55,6 +55,7 @@ void Enemy::Move(vector<vector<char>> mapData, float bgW, float bgH, float minMa
 		_dir.x = 1;
 	}
 	if (_isJump) {
+		Novice::PlayAudio(LoadRes::_audio_enemyJump, 0, 0.7f);
 		_dir.y = 1;
 		_isJump = false;
 	}

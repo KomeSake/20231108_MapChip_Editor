@@ -8,7 +8,7 @@
 #include "Scripts/Enemy.h"
 
 
-const char kWindowTitle[] = "v20230707";
+const char kWindowTitle[] = "LC1A_16_ソウ_チョウキ_v20230707";
 const int screenW = 800, screenH = 800;
 const int bgW = 50 * 32, bgH = 25 * 32;
 const float minMapSize = 32;
@@ -116,6 +116,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 
 			SceneObj->SceneGame(int(PlayerObj->_hp), Map::_isEditor);
+			Novice::ScreenPrintf(35, 35, "WAD key: Move & Jump");
+			Novice::ScreenPrintf(35, 55, "SPACE key: Map Editor modle");
+			Novice::ScreenPrintf(35, 75, "Editor Modle: Left Mouse to customize map");
 
 			if (!Novice::IsPlayingAudio(bgmLoopHandle) || bgmLoopHandle == -1) {
 				bgmLoopHandle = Novice::PlayAudio(LoadRes::_audio_bgm, 0, 1);
@@ -138,7 +141,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//Debug情報
 		//Novice::ScreenPrintf(10, 10, "Player(%d,%d)", int(PlayerObj->_pos.x), int(PlayerObj->_pos.y));
 		//Novice::ScreenPrintf(10, 30, "Camera(%d,%d)", int(CameraObj->_pos.x), int(CameraObj->_pos.y));
-		Novice::ScreenPrintf(10, 750, "Mouse(%d,%d)", mouseX, mouseY);
+		//Novice::ScreenPrintf(10, 750, "Mouse(%d,%d)", mouseX, mouseY);
 
 		// フレームの終了
 		Novice::EndFrame();

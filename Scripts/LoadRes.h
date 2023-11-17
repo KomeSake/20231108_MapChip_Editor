@@ -60,6 +60,7 @@ public:
 	inline static int _audio_enemyDead;
 	inline static int _audio_enemyJump;
 	inline static int _audio_playerDead;
+	inline static int _audio_playerDamage;
 	inline static int _audio_jump;
 
 

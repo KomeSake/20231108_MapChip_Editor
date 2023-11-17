@@ -10,11 +10,11 @@ void Player::Initial()
 	_pos = { 32 + 16,32 + 16 };
 	_vel = { 0,0 };
 	_dir = { 0,0 };
-	_speed = 10;
-	_jumpSpeed = 15;
-	_gravity = 0.7f;
+	_speed = 7;
+	_jumpSpeed = 9;
+	_gravity = 0.3f;
 	_acc = { 0,0 };
-	_velMax = 15;
+	_velMax = 10;
 	_friction = 0.4f;
 
 	_width = 32;
@@ -166,6 +166,7 @@ void Player::Collide()
 					_vel.x = it->_dir.x * _speed * 2.f * -1;
 					_color = RED;
 					_isGod = true;
+					Novice::PlayAudio(LoadRes::_audio_playerDamage, 0, 1);
 					break;
 				}
 			}
@@ -205,10 +206,10 @@ void Player::Dead()
 {
 	if (_hp <= 0 && !_isDead) {
 		_vel.y = _jumpSpeed * 0.7f;
+		Novice::PlayAudio(LoadRes::_audio_playerDead, 0, 1);
 		_isDead = true;
 	}
 	if (_isDead) {
-		Novice::PlayAudio(LoadRes::_audio_playerDead, 0, 1);
 		_color = RED;
 		_vel.x = _speed * 0.5f;
 		_pos.x += _vel.x;

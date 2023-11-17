@@ -107,6 +107,7 @@ void LoadRes::LoadResNovice()
 	_audio_enemyDead = Novice::LoadAudio("./Resources/Sounds/cncl06.mp3");
 	_audio_enemyJump = Novice::LoadAudio("./Resources/Sounds/Hand_Clap_03.mp3");
 	_audio_playerDead = Novice::LoadAudio("./Resources/Sounds/Hit.mp3");
+	_audio_playerDamage = Novice::LoadAudio("./Resources/Sounds/player_damage.mp3");
 	_audio_jump = Novice::LoadAudio("./Resources/Sounds/Jump1.mp3");
 }
 

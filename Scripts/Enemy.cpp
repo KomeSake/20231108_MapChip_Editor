@@ -15,7 +15,7 @@ void Enemy::Initial()
 	_speed = 1;
 	_jumpSpeed = 5;
 	_velMax = 3;
-	_gravity = 0.2f;
+	_gravity = 0.05f;
 
 	_width = 32;
 	_height = 32;
@@ -57,7 +57,7 @@ void Enemy::Move(vector<vector<char>> mapData, float bgW, float bgH, float minMa
 		_dir.x = 1;
 	}
 	if (_isJump) {
-		Novice::PlayAudio(LoadRes::_audio_enemyJump, 0, 0.7f);
+		Novice::PlayAudio(LoadRes::_audio_enemyJump, 0, 0.3f);
 		_dir.y = 1;
 		_isJump = false;
 	}
@@ -125,18 +125,18 @@ void Enemy::Dead()
 {
 	if (_hp <= 0 && !_isDead) {
 		_vel.y = _jumpSpeed * 0.9f;
+		Novice::PlayAudio(LoadRes::_audio_enemyDead, 0, 1);
 		_isDead = true;
 	}
 	if (_isDead) {
 		_color = RED;
 		_vel.x = _speed * 0.5f;
 		_pos.x += _vel.x;
-		_vel.y -= _gravity;
+		_vel.y -= _gravity * 3;
 		_pos.y += _vel.y;
 
 		_rad += -_vel.y * 0.01f;
 
-		Novice::PlayAudio(LoadRes::_audio_enemyDead, 0, 1);
 		if (_pos.y < -50) {
 			EnemyManager::ReleaseEnemy(this);
 		}

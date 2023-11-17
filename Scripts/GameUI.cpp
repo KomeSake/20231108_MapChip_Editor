@@ -127,7 +127,7 @@ UI_Game::UI_Game()
 {
 	_width = 800;
 	_height = 800;
-	_pos = { 10,10 };//以左上角的Hp为标准
+	_pos = { 585,10 };//以左上角的Hp为标准
 	_color = WHITE;
 
 	_mapEditorIndex = nothing;
@@ -142,7 +142,7 @@ void UI_Game::UIOpen(int hp, bool isMapEditor)
 	int mouseX{}, mouseY{};
 	Novice::GetMousePosition(&mouseX, &mouseY);
 	if (isMapEditor) {
-		UITexture(_pos.x - 10, _pos.y + 100, LoadRes::_spUI_mapEditor, WHITE);
+		UITexture(0, 110, LoadRes::_spUI_mapEditor, WHITE);
 
 		if (mouseX > 10 && mouseY > 163
 			&& mouseX < 58 && mouseY < 208

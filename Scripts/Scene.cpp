@@ -6,6 +6,8 @@ Scene::Scene()
 	UI_StartObj = new UI_Start();
 	UI_GameObj = new UI_Game();
 	UI_GameOverObj = new UI_GameOver();
+	_isUIGame_save = false;
+	_isUIGame_reset = false;
 }
 
 void Scene::SceneStart(char prekeys[], char keys[])
@@ -22,6 +24,14 @@ void Scene::SceneStart(char prekeys[], char keys[])
 void Scene::SceneGame(int playerHp, bool isMapEditor)
 {
 	UI_GameObj->UIOpen(playerHp, isMapEditor);
+	if (UI_GameObj->_isSave) {
+		UI_GameObj->_isSave = false;
+		_isUIGame_save = true;
+	}
+	if (UI_GameObj->_isReset) {
+		UI_GameObj->_isReset = false;
+		_isUIGame_reset = true;
+	}
 }
 
 void Scene::SceneGameOver(int mouseX, int mouseY, char prekeys[], char keys[])

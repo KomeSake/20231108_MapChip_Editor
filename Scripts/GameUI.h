@@ -49,6 +49,10 @@ public:
 		box2,
 		enemyMother
 	}_mapEditorIndex;
+	bool _isSave;
+	bool _isReset;
+	bool _isButton_save;
+	bool _isButton_reset;
 
 	UI_Game();
 	void UIOpen(int hp, bool isMapEditor);

@@ -154,8 +154,8 @@ void Map::MapEditor(vector<vector<char>>& mapData, int bgH, float minMapSize, in
 	int mouseRow = (int)(worldPos.x / minMapSize);
 	//在MapEditor菜单的时候不要有反应，而且要在屏幕之内
 	if (mouseY > 0 && mouseY < 110 && mouseX>0 && mouseX < screenW
-		|| mouseY>110 && mouseY < 400 && mouseX>140 && mouseX < screenW
-		|| mouseY>400 && mouseY < screenH && mouseX>0 && mouseX < screenW)
+		|| mouseY>110 && mouseY < 450 && mouseX>140 && mouseX < screenW
+		|| mouseY>450 && mouseY < screenH && mouseX>0 && mouseX < screenW)
 	{
 		switch (mapEditorIndex)
 		{

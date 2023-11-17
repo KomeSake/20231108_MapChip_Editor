@@ -20,5 +20,8 @@ public:
 	UI_Start* UI_StartObj;
 	UI_Game* UI_GameObj;
 	UI_GameOver* UI_GameOverObj;
+
+	bool _isUIGame_save;
+	bool _isUIGame_reset;
 };
 

@@ -139,33 +139,35 @@ void Player::Collide()
 	Vector2 rightDownPos = { _pos.x + _width / 2,_pos.y - _height / 2 };
 	for (Enemy* it : EnemyManager::_enemyUpdateVector) {
 		//只有在下落的时候才算踩踏
-		if (_vel.y < 0) {
-			if (leftDownPos.x > it->_pos.x - it->_width / 2
-				&& leftDownPos.x<it->_pos.x + it->_width / 2
-				&& leftDownPos.y>it->_pos.y - it->_height / 2
-				&& leftDownPos.y < it->_pos.y + it->_height / 2
-				|| rightDownPos.x > it->_pos.x - it->_width / 2
-				&& rightDownPos.x<it->_pos.x + it->_width / 2
-				&& rightDownPos.y>it->_pos.y - it->_height / 2
-				&& rightDownPos.y < it->_pos.y + it->_height / 2) {
-				it->_hp -= _damage;
-				//踩中了自己还会跳一下
-				_vel.y = _jumpSpeed;
-				Novice::PlayAudio(LoadRes::_audio_attack, 0, 1);
-				continue;
+		if (!it->_isDead) {
+			if (_vel.y < 0) {
+				if (leftDownPos.x > it->_pos.x - it->_width / 2
+					&& leftDownPos.x<it->_pos.x + it->_width / 2
+					&& leftDownPos.y>it->_pos.y - it->_height / 2
+					&& leftDownPos.y < it->_pos.y + it->_height / 2
+					|| rightDownPos.x > it->_pos.x - it->_width / 2
+					&& rightDownPos.x<it->_pos.x + it->_width / 2
+					&& rightDownPos.y>it->_pos.y - it->_height / 2
+					&& rightDownPos.y < it->_pos.y + it->_height / 2) {
+					it->_hp -= _damage;
+					//踩中了自己还会跳一下
+					_vel.y = _jumpSpeed;
+					Novice::PlayAudio(LoadRes::_audio_attack, 0, 1);
+					continue;
+				}
 			}
-		}
-		//不然就正常判断碰撞
-		else {
-			float length = sqrtf(powf(it->_pos.x - _pos.x, 2) + powf(it->_pos.y - _pos.y, 2));
-			if (length < it->_width / 2 + _width / 2
-				&& !_isGod) {
-				_hp -= it->_damage;
-				_vel.y = _jumpSpeed * 0.7f;
-				_vel.x = it->_dir.x * _speed * 2.f * -1;
-				_color = RED;
-				_isGod = true;
-				break;
+			//不然就正常判断碰撞
+			else {
+				float length = sqrtf(powf(it->_pos.x - _pos.x, 2) + powf(it->_pos.y - _pos.y, 2));
+				if (length < it->_width / 2 + _width / 2
+					&& !_isGod) {
+					_hp -= it->_damage;
+					_vel.y = _jumpSpeed * 0.7f;
+					_vel.x = it->_dir.x * _speed * 2.f * -1;
+					_color = RED;
+					_isGod = true;
+					break;
+				}
 			}
 		}
 	}

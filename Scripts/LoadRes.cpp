@@ -97,6 +97,8 @@ void LoadRes::LoadResNovice()
 
 	_spUI_mapEditor = { Novice::LoadTexture("./Resources/Textures/UI/mapEditor.png"),142,289 };
 	_spUI_mapEditor_yes = { Novice::LoadTexture("./Resources/Textures/UI/mapEditor_yes.png"),38,29 };
+	_spUI_message_save = { Novice::LoadTexture("./Resources/Textures/UI/message_save.png"),351,214 };
+	_spUI_message_reset = { Novice::LoadTexture("./Resources/Textures/UI/message_reset.png"),351,214 };
 
 	//Sounds
 	_audio_bgm = Novice::LoadAudio("./Resources/Sounds/MusMus-BGM-173.mp3");

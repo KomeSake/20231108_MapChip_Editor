@@ -69,23 +69,23 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		case Scene::Game:
 			//Reload
-			if (!preKeys[DIK_R] && keys[DIK_R]) {
+			if (SceneObj->_isUIGame_reset) {
+				SceneObj->_isUIGame_reset = false;
 				LoadRes::UnLoadResNovice();
 				LoadRes::LoadResNovice();
 				Map::_mapData.clear();
 				Map::LoaclMapLoad(Map::_mapFileName, Map::_mapData);
 			}
 			//Save
-			if (!preKeys[DIK_S] && keys[DIK_S]) {
-				LoadRes::UnLoadResNovice();
-				LoadRes::LoadResNovice();
+			if (SceneObj->_isUIGame_save) {
+				SceneObj->_isUIGame_save = false;
 				Map::LoaclMapSave(Map::_mapFileName, Map::_mapData);
 			}
-			//MapEditor
+			//MapEditorの操作
 			if (Map::_isEditor
 				&& !preKeys[DIK_SPACE] && keys[DIK_SPACE]) {
 				Map::_isEditor = false;
-
+				UI_Game::_mapEditorIndex = UI_Game::nothing;
 			}
 			else if (!preKeys[DIK_SPACE] && keys[DIK_SPACE]) {
 				Map::_isEditor = true;

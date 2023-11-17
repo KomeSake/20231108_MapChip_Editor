@@ -12,6 +12,7 @@ public:
 	Vector2 _vel;
 	Vector2 _dir;
 	Vector2 _acc;
+	float _rad;
 	float _speed;
 	float _jumpSpeed;
 	float _velMax;
@@ -27,6 +28,7 @@ public:
 
 	bool _isLeft;
 	bool _isJump;
+	bool _isDead;
 
 	Enemy();
 	void Initial();

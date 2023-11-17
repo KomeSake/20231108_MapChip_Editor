@@ -131,6 +131,10 @@ UI_Game::UI_Game()
 	_color = WHITE;
 
 	_mapEditorIndex = nothing;
+	_isSave = false;
+	_isReset = false;
+	_isButton_save = false;
+	_isButton_reset = false;
 }
 
 void UI_Game::UIOpen(int hp, bool isMapEditor)
@@ -174,7 +178,17 @@ void UI_Game::UIOpen(int hp, bool isMapEditor)
 			&& mouseX < 117 && mouseY < 397
 			&& Novice::IsTriggerMouse(0)) {
 			//save
+			_isButton_save = true;
+			_isButton_reset = false;
 		}
+		else if (mouseX > 20 && mouseY > 408
+			&& mouseX < 117 && mouseY < 450
+			&& Novice::IsTriggerMouse(0)) {
+			//reset
+			_isButton_save = false;
+			_isButton_reset = true;
+		}
+
 		switch (_mapEditorIndex)
 		{
 		case UI_Game::nothing:
@@ -194,6 +208,35 @@ void UI_Game::UIOpen(int hp, bool isMapEditor)
 		case UI_Game::enemyMother:
 			UITexture(55, 310, LoadRes::_spUI_mapEditor_yes, WHITE);
 			break;
+		}
+
+		if (_isButton_save) {
+			UITexture(244, 298, LoadRes::_spUI_message_save, WHITE);
+			if (mouseX > 458 && mouseY > 454
+				&& mouseX < 555 && mouseY < 511
+				&& Novice::IsTriggerMouse(0)) {
+				_isButton_save = false;
+				_isSave = true;
+			}
+			if (mouseX > 285 && mouseY > 454
+				&& mouseX < 384 && mouseY < 511
+				&& Novice::IsTriggerMouse(0)) {
+				_isButton_save = false;
+			}
+		}
+		if (_isButton_reset) {
+			UITexture(244, 298, LoadRes::_spUI_message_reset, WHITE);
+			if (mouseX > 458 && mouseY > 454
+				&& mouseX < 555 && mouseY < 511
+				&& Novice::IsTriggerMouse(0)) {
+				_isButton_reset = false;
+				_isReset = true;
+			}
+			if (mouseX > 285 && mouseY > 454
+				&& mouseX < 384 && mouseY < 511
+				&& Novice::IsTriggerMouse(0)) {
+				_isButton_reset = false;
+			}
 		}
 	}
 

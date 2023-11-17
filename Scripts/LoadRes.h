@@ -50,6 +50,8 @@ public:
 	inline static Sprite _spUI_hpBox;
 	inline static Sprite _spUI_mapEditor;
 	inline static Sprite _spUI_mapEditor_yes;
+	inline static Sprite _spUI_message_save;
+	inline static Sprite _spUI_message_reset;
 
 	//Sounds
 	inline static int _audio_bgm;

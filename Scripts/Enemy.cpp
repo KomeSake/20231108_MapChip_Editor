@@ -11,6 +11,7 @@ void Enemy::Initial()
 	_dir = { 0,0 };
 	_vel = { 0,0 };
 	_acc = { 0,0 };
+	_rad = 0;
 	_speed = 1;
 	_jumpSpeed = 5;
 	_velMax = 3;
@@ -26,6 +27,7 @@ void Enemy::Initial()
 
 	_isLeft = true;
 	_isJump = false;
+	_isDead = false;
 
 	//随机算出一开始往左还是往右
 	std::random_device rd;
@@ -121,19 +123,33 @@ void Enemy::Move(vector<vector<char>> mapData, float bgW, float bgH, float minMa
 
 void Enemy::Dead()
 {
-	if (_hp <= 0) {
+	if (_hp <= 0 && !_isDead) {
+		_vel.y = _jumpSpeed * 0.9f;
+		_isDead = true;
+	}
+	if (_isDead) {
+		_color = RED;
+		_vel.x = _speed * 0.5f;
+		_pos.x += _vel.x;
+		_vel.y -= _gravity;
+		_pos.y += _vel.y;
+
+		_rad += -_vel.y * 0.01f;
+
 		Novice::PlayAudio(LoadRes::_audio_enemyDead, 0, 1);
-		EnemyManager::ReleaseEnemy(this);
+		if (_pos.y < -50) {
+			EnemyManager::ReleaseEnemy(this);
+		}
 	}
 }
 
 void Enemy::Show()
 {
 	if (_vel.x >= 0) {
-		FrameAnimation(_pos.x, _pos.y, LoadRes::_sl_Enemy_R, 0, _color, 100, 0);
+		FrameAnimation(_pos.x, _pos.y, LoadRes::_sl_Enemy_R, _rad, _color, 100, 0);
 	}
 	else if (_vel.x < 0) {
-		FrameAnimation(_pos.x, _pos.y, LoadRes::_sl_Enemy_L, 0, _color, 100, 0);
+		FrameAnimation(_pos.x, _pos.y, LoadRes::_sl_Enemy_L, _rad, _color, 100, 0);
 	}
 }
 
@@ -146,7 +162,9 @@ void Enemy::Instantiated(float posX, float posY)
 void EnemyManager::EnemyUpdate(vector<vector<char>>mapData, float bgW, float bgH, float minSize)
 {
 	for (Enemy* it : _enemyUpdateVector) {
-		it->Move(mapData, bgW, bgH, minSize);
+		if (!it->_isDead) {
+			it->Move(mapData, bgW, bgH, minSize);
+		}
 		it->Dead();
 	}
 }

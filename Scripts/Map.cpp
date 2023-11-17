@@ -77,6 +77,32 @@ bool Map::IsThrough(vector<vector<char>> mapData, int line, int row)
 	return true;
 }
 
+void Map::LoaclMapSave(string name, vector<vector<char>>& mapData)
+{
+	ofstream file(name, ios::trunc);//将保存的文件的数据都清空
+
+	if (!file.is_open()) {
+		throw runtime_error("ERRO:File load is erro!!" + name);
+	}
+	else {
+		const char* cname = name.c_str();
+		Novice::ConsolePrintf("%s file opened\n", cname);
+	}
+
+	for (const auto& row : mapData) {
+		for (const char& cell : row) {
+			file.write(&cell, sizeof(cell));
+			file.put(',');
+		}
+		if (!row.empty()) {
+			file.seekp(-1, ios::cur);
+		}
+		file.put('\n');
+	}
+
+	file.close();
+}
+
 void Map::MapEditorShow(int bgW, int bgH, float minMapSize, UI_Game::MapEditorIndex mapEditorIndex)
 {
 	int line = int(bgH / minMapSize);

@@ -119,6 +119,7 @@ void LoadRes::UnLoadResNovice()
 	buf[4] = _sl_playerIdle_R[0].path;
 	buf[5] = _sl_playerRun_L[0].path;
 	buf[6] = _sl_playerRun_R[0].path;
+	buf[7] = _sl_map2[0].path;
 
 	for (int i = 0; i < bufMax; i++) {
 		if (buf[i] != NULL) {

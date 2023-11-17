@@ -175,26 +175,26 @@ void UI_Game::UIOpen(int hp, bool isMapEditor)
 			&& Novice::IsTriggerMouse(0)) {
 			//save
 		}
-	}
-	switch (_mapEditorIndex)
-	{
-	case UI_Game::nothing:
-		break;
-	case UI_Game::bg1:
-		UITexture(17, 185, LoadRes::_spUI_mapEditor_yes, WHITE);
-		break;
-	case UI_Game::box1:
-		UITexture(85, 185, LoadRes::_spUI_mapEditor_yes, WHITE);
-		break;
-	case UI_Game::bg2:
-		UITexture(17, 247, LoadRes::_spUI_mapEditor_yes, WHITE);
-		break;
-	case UI_Game::box2:
-		UITexture(85, 247, LoadRes::_spUI_mapEditor_yes, WHITE);
-		break;
-	case UI_Game::enemyMother:
-		UITexture(55, 310, LoadRes::_spUI_mapEditor_yes, WHITE);
-		break;
+		switch (_mapEditorIndex)
+		{
+		case UI_Game::nothing:
+			break;
+		case UI_Game::bg1:
+			UITexture(17, 185, LoadRes::_spUI_mapEditor_yes, WHITE);
+			break;
+		case UI_Game::box1:
+			UITexture(85, 185, LoadRes::_spUI_mapEditor_yes, WHITE);
+			break;
+		case UI_Game::bg2:
+			UITexture(17, 247, LoadRes::_spUI_mapEditor_yes, WHITE);
+			break;
+		case UI_Game::box2:
+			UITexture(85, 247, LoadRes::_spUI_mapEditor_yes, WHITE);
+			break;
+		case UI_Game::enemyMother:
+			UITexture(55, 310, LoadRes::_spUI_mapEditor_yes, WHITE);
+			break;
+		}
 	}
 
 	UITexture(_pos.x, _pos.y, LoadRes::_spUI_hpBox, _color);

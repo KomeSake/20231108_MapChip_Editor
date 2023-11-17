@@ -75,6 +75,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				Map::_mapData.clear();
 				Map::LoaclMapLoad(Map::_mapFileName, Map::_mapData);
 			}
+			//Save
+			if (!preKeys[DIK_S] && keys[DIK_S]) {
+				LoadRes::UnLoadResNovice();
+				LoadRes::LoadResNovice();
+				Map::LoaclMapSave(Map::_mapFileName, Map::_mapData);
+			}
 			//MapEditor
 			if (Map::_isEditor
 				&& !preKeys[DIK_SPACE] && keys[DIK_SPACE]) {

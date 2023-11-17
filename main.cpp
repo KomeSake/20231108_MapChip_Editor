@@ -75,15 +75,28 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				Map::_mapData.clear();
 				Map::LoaclMapLoad(Map::_mapFileName, Map::_mapData);
 			}
+			//MapEditor
+			if (Map::_isEditor
+				&& !preKeys[DIK_SPACE] && keys[DIK_SPACE]) {
+				Map::_isEditor = false;
 
-			PlayerObj->Move(preKeys, keys, Map::_mapData, bgW, bgH, minMapSize);
-			CameraObj->Move(PlayerObj->_pos);
-			MyTools::CheckCameraValume(CameraObj->_pos, screenW, screenH);
-			EnemyManagerObj->EnemyBornToMap(Map::_mapData, bgW, bgH, minMapSize);
-			EnemyManager::EnemyUpdate(Map::_mapData, bgW, bgH, minMapSize);
+			}
+			else if (!preKeys[DIK_SPACE] && keys[DIK_SPACE]) {
+				Map::_isEditor = true;
+			}
+
+			if (!Map::_isEditor) {
+				PlayerObj->Move(preKeys, keys, Map::_mapData, bgW, bgH, minMapSize);
+				CameraObj->Move(PlayerObj->_pos);
+				MyTools::CheckCameraValume(CameraObj->_pos, screenW, screenH);
+				EnemyManagerObj->EnemyBornToMap(Map::_mapData, bgW, bgH, minMapSize);
+				EnemyManager::EnemyUpdate(Map::_mapData, bgW, bgH, minMapSize);
+			}
+			else {
+				Map::MapEditor(Map::_mapData, bgH, minMapSize, screenW, screenH, UI_Game::_mapEditorIndex);
+			}
 
 			PlayerObj->Collide();
-
 			PlayerObj->Dead();
 			if (PlayerObj->_hp <= 0) {
 				SceneObj->_sceneIndex = SceneObj->GameOver;
@@ -92,7 +105,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			MapObj->MapShow(Map::_mapData, minMapSize);
 			EnemyManager::EnemyUpdateShow();
 			PlayerObj->Show();
-			SceneObj->SceneGame(int(PlayerObj->_hp));
+			if (Map::_isEditor) {
+				MapObj->MapEditorShow(bgW, bgH, minMapSize, UI_Game::_mapEditorIndex);
+			}
+
+			SceneObj->SceneGame(int(PlayerObj->_hp), Map::_isEditor);
 
 			if (!Novice::IsPlayingAudio(bgmLoopHandle) || bgmLoopHandle == -1) {
 				bgmLoopHandle = Novice::PlayAudio(LoadRes::_audio_bgm, 0, 1);
@@ -115,6 +132,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//Debug情報
 		//Novice::ScreenPrintf(10, 10, "Player(%d,%d)", int(PlayerObj->_pos.x), int(PlayerObj->_pos.y));
 		//Novice::ScreenPrintf(10, 30, "Camera(%d,%d)", int(CameraObj->_pos.x), int(CameraObj->_pos.y));
+		Novice::ScreenPrintf(10, 750, "Mouse(%d,%d)", mouseX, mouseY);
 
 		// フレームの終了
 		Novice::EndFrame();

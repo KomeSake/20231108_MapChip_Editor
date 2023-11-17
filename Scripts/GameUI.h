@@ -40,8 +40,18 @@ class UI_Game :
 	public GameUI
 {
 public:
+	inline static enum MapEditorIndex
+	{
+		nothing,
+		bg1,
+		box1,
+		bg2,
+		box2,
+		enemyMother
+	}_mapEditorIndex;
+
 	UI_Game();
-	void UIOpen(int hp);
+	void UIOpen(int hp, bool isMapEditor);
 };
 
 class UI_GameOver :

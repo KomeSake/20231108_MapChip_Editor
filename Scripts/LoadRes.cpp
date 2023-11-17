@@ -37,6 +37,7 @@ void LoadRes::LoadResNovice()
 		_sl_playerRun_R[i] = { path,x,y,w,h,listW,listH };
 	}
 	//Enemy
+	_sp_EnemyMother = { Novice::LoadTexture("./Resources/Textures/EnemyMother.png"),32,32 };
 	for (int i = 0; i < 5; i++) {
 		path = Novice::LoadTexture("./Resources/Textures/Enemy1_L.png");
 		w = 32, h = 32;
@@ -59,6 +60,13 @@ void LoadRes::LoadResNovice()
 		x = i * w, y = 0;
 		listW = 64, listH = 32;
 		_sl_map[i] = { path,x,y,w,h,listW,listH };
+	}
+	for (int i = 0; i < 2; i++) {
+		path = Novice::LoadTexture("./Resources/Textures/map_list2.png");
+		w = 32, h = 32;
+		x = i * w, y = 0;
+		listW = 64, listH = 32;
+		_sl_map2[i] = { path,x,y,w,h,listW,listH };
 	}
 
 	//UI
@@ -86,6 +94,9 @@ void LoadRes::LoadResNovice()
 	_spUI_hp = { Novice::LoadTexture("./Resources/Textures/UI/hp.png"),34,28 };
 	_spUI_hp2 = { Novice::LoadTexture("./Resources/Textures/UI/hp2.png"),34,28 };
 	_spUI_hpBox = { Novice::LoadTexture("./Resources/Textures/UI/hpBox.png"),204,44 };
+
+	_spUI_mapEditor = { Novice::LoadTexture("./Resources/Textures/UI/mapEditor.png"),142,289 };
+	_spUI_mapEditor_yes = { Novice::LoadTexture("./Resources/Textures/UI/mapEditor_yes.png"),38,29 };
 
 	//Sounds
 	_audio_bgm = Novice::LoadAudio("./Resources/Sounds/MusMus-BGM-173.mp3");

@@ -14,7 +14,7 @@ public:
 
 	Scene();
 	void SceneStart(char prekeys[], char keys[]);
-	void SceneGame(int playerHp);
+	void SceneGame(int playerHp, bool isMapEditor);
 	void SceneGameOver(int mouseX, int mouseY, char prekeys[], char keys[]);
 
 	UI_Start* UI_StartObj;

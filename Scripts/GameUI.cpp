@@ -129,10 +129,74 @@ UI_Game::UI_Game()
 	_height = 800;
 	_pos = { 10,10 };//以左上角的Hp为标准
 	_color = WHITE;
+
+	_mapEditorIndex = nothing;
 }
 
-void UI_Game::UIOpen(int hp)
+void UI_Game::UIOpen(int hp, bool isMapEditor)
 {
+	int mouseX{}, mouseY{};
+	Novice::GetMousePosition(&mouseX, &mouseY);
+	if (isMapEditor) {
+		UITexture(_pos.x - 10, _pos.y + 100, LoadRes::_spUI_mapEditor, WHITE);
+
+		if (mouseX > 10 && mouseY > 163
+			&& mouseX < 58 && mouseY < 208
+			&& Novice::IsTriggerMouse(0)) {
+			//bg1
+			_mapEditorIndex = bg1;
+		}
+		else if (mouseX > 80 && mouseY > 163
+			&& mouseX < 127 && mouseY < 208
+			&& Novice::IsTriggerMouse(0)) {
+			//box1
+			_mapEditorIndex = box1;
+		}
+		else if (mouseX > 10 && mouseY > 224
+			&& mouseX < 58 && mouseY < 272
+			&& Novice::IsTriggerMouse(0)) {
+			//bg2
+			_mapEditorIndex = bg2;
+		}
+		else if (mouseX > 80 && mouseY > 224
+			&& mouseX < 127 && mouseY < 272
+			&& Novice::IsTriggerMouse(0)) {
+			//box2
+			_mapEditorIndex = box2;
+		}
+		else if (mouseX > 43 && mouseY > 287
+			&& mouseX < 92 && mouseY < 334
+			&& Novice::IsTriggerMouse(0)) {
+			//enemyMother
+			_mapEditorIndex = enemyMother;
+		}
+		else if (mouseX > 20 && mouseY > 355
+			&& mouseX < 117 && mouseY < 397
+			&& Novice::IsTriggerMouse(0)) {
+			//save
+		}
+	}
+	switch (_mapEditorIndex)
+	{
+	case UI_Game::nothing:
+		break;
+	case UI_Game::bg1:
+		UITexture(17, 185, LoadRes::_spUI_mapEditor_yes, WHITE);
+		break;
+	case UI_Game::box1:
+		UITexture(85, 185, LoadRes::_spUI_mapEditor_yes, WHITE);
+		break;
+	case UI_Game::bg2:
+		UITexture(17, 247, LoadRes::_spUI_mapEditor_yes, WHITE);
+		break;
+	case UI_Game::box2:
+		UITexture(85, 247, LoadRes::_spUI_mapEditor_yes, WHITE);
+		break;
+	case UI_Game::enemyMother:
+		UITexture(55, 310, LoadRes::_spUI_mapEditor_yes, WHITE);
+		break;
+	}
+
 	UITexture(_pos.x, _pos.y, LoadRes::_spUI_hpBox, _color);
 	switch (hp)
 	{

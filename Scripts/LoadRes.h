@@ -32,11 +32,13 @@ public:
 	inline static map<int, SpriteList> _sl_playerRun_R;
 
 	//Enemy
+	inline static Sprite _sp_EnemyMother;
 	inline static map<int, SpriteList> _sl_Enemy_L;
 	inline static map<int, SpriteList> _sl_Enemy_R;
 
 	//Map
 	inline static map<int, SpriteList> _sl_map;
+	inline static map<int, SpriteList> _sl_map2;
 
 	//UI
 	inline static map<int, SpriteList> _slUI_screenDead;
@@ -46,6 +48,8 @@ public:
 	inline static Sprite _spUI_hp;
 	inline static Sprite _spUI_hp2;
 	inline static Sprite _spUI_hpBox;
+	inline static Sprite _spUI_mapEditor;
+	inline static Sprite _spUI_mapEditor_yes;
 
 	//Sounds
 	inline static int _audio_bgm;

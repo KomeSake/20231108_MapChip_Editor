@@ -19,9 +19,9 @@ void Scene::SceneStart(char prekeys[], char keys[])
 	}
 }
 
-void Scene::SceneGame(int playerHp)
+void Scene::SceneGame(int playerHp, bool isMapEditor)
 {
-	UI_GameObj->UIOpen(playerHp);
+	UI_GameObj->UIOpen(playerHp, isMapEditor);
 }
 
 void Scene::SceneGameOver(int mouseX, int mouseY, char prekeys[], char keys[])

@@ -25,9 +25,12 @@ void Player::Initial()
 
 	_hp = 10;
 	_damage = 2;
+	_attackTime = 100;
 
 	_isJump = false;
+	_isLeft = false;
 	_isGod = false;
+	_isDead = false;
 }
 
 void Player::Move(char prekeys[], char keys[], vector<vector<char>> mapData, float bgW, float bgH, float minMapSize)
@@ -46,9 +49,11 @@ void Player::Move(char prekeys[], char keys[], vector<vector<char>> mapData, flo
 	}
 	if (keys[DIK_A]) {
 		_dir.x = -1;
+		_isLeft = true;
 	}
 	else if (keys[DIK_D]) {
 		_dir.x = 1;
+		_isLeft = false;
 	}
 	else {
 		_dir.x = 0;
@@ -179,6 +184,14 @@ void Player::Collide()
 	}
 }
 
+void Player::Attack()
+{
+	if (Novice::IsPressMouse(0) && MyTimers(_attackTime, 2)) {
+		bool isBulletLeft = _isLeft ? 0 : 1;
+		BulletManager::AcquireBullet(_pos.x, _pos.y, isBulletLeft);
+	}
+}
+
 void Player::Show()
 {
 	//受伤会变成红色，所以要一段时间后把时间变回来
@@ -188,17 +201,21 @@ void Player::Show()
 		}
 	}
 
-	if (_vel.x < 0.5f && _vel.x >= 0) {
-		FrameAnimation(_pos.x, _pos.y, LoadRes::_sl_playerIdle_R, _rad, _color, 300, 0);
+	if (!_isLeft) {
+		if (_vel.x < 0.5f) {
+			FrameAnimation(_pos.x, _pos.y, LoadRes::_sl_playerIdle_R, _rad, _color, 300, 0);
+		}
+		else {
+			FrameAnimation(_pos.x, _pos.y, LoadRes::_sl_playerRun_R, _rad, _color, 100, 0);
+		}
 	}
-	else if (_vel.x > -0.5f && _vel.x <= 0) {
-		FrameAnimation(_pos.x, _pos.y, LoadRes::_sl_playerIdle_L, _rad, _color, 300, 0);
-	}
-	else if (_vel.x > 0.5f) {
-		FrameAnimation(_pos.x, _pos.y, LoadRes::_sl_playerRun_R, _rad, _color, 100, 0);
-	}
-	else if (_vel.x < -0.5f) {
-		FrameAnimation(_pos.x, _pos.y, LoadRes::_sl_playerRun_L, _rad, _color, 100, 0);
+	else {
+		if (_vel.x < -0.5f) {
+			FrameAnimation(_pos.x, _pos.y, LoadRes::_sl_playerRun_L, _rad, _color, 100, 0);
+		}
+		else {
+			FrameAnimation(_pos.x, _pos.y, LoadRes::_sl_playerIdle_L, _rad, _color, 300, 0);
+		}
 	}
 }
 

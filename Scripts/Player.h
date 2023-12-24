@@ -2,6 +2,7 @@
 #include "MyTools.h"
 #include "Map.h"
 #include "Enemy.h"
+#include "Bullet.h"
 #include <cmath>
 #include <vector>
 using namespace std;
@@ -28,8 +29,10 @@ public:
 
 	float _hp;
 	float _damage;
+	int _attackTime;
 
 	bool _isJump;
+	bool _isLeft;
 	bool _isGod;//是否处于无敌状态
 	bool _isDead;
 
@@ -37,6 +40,7 @@ public:
 	void Initial();
 	void Move(char prekeys[], char keys[], vector<vector<char>> mapData, float bgW, float bgH, float minMapSize);
 	void Collide();
+	void Attack();
 	void Show();
 	void Dead();
 };

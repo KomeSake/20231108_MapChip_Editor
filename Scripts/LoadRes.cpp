@@ -36,6 +36,8 @@ void LoadRes::LoadResNovice()
 		listW = 160, listH = 32;
 		_sl_playerRun_R[i] = { path,x,y,w,h,listW,listH };
 	}
+	//Bullet
+	_sp_Bullet = { Novice::LoadTexture("./Resources/Textures/Bullet.png"),32,32 };
 	//Enemy
 	_sp_EnemyMother = { Novice::LoadTexture("./Resources/Textures/EnemyMother.png"),32,32 };
 	for (int i = 0; i < 5; i++) {

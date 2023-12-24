@@ -6,9 +6,10 @@
 #include "Scripts/Scene.h"
 #include "Scripts/Map.h"
 #include "Scripts/Enemy.h"
+#include "Scripts/Bullet.h"
 
 
-const char kWindowTitle[] = "LC1A_16_ソウ_チョウキ_v20230707";
+const char kWindowTitle[] = "LC1A_16_ソウ_チョウキ";
 const int screenW = 800, screenH = 800;
 const int bgW = 50 * 32, bgH = 25 * 32;
 const float minMapSize = 32;
@@ -49,11 +50,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		int mouseX{}, mouseY{};
 		Novice::GetMousePosition(&mouseX, &mouseY);
+		//最底下的背景（防止摄像机抖动的时候露出不好看的背景色）
+		Novice::DrawBox(0, 0, int(screenW), int(screenH), 0, BLACK, kFillModeSolid);
 
 		switch (SceneObj->_sceneIndex) {
 		case Scene::Loading:
 			Novice::StopAudio(bgmLoopHandle);
 
+			BulletManager::_bulletUpdateVector.clear();
 			EnemyManager::_enemyUpdateVector.clear();
 			PlayerObj = new Player();
 			CameraObj = new Camera(screenW, screenH, bgW, bgH);
@@ -96,6 +100,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				CameraObj->Move(PlayerObj->_pos);
 				MyTools::CheckCameraValume(CameraObj->_pos, screenW, screenH);
 				EnemyManagerObj->EnemyBornToMap(Map::_mapData, bgW, bgH, minMapSize);
+				PlayerObj->Attack();
+				BulletManager::BulletUpdate(Map::_mapData, bgW, bgH, minMapSize);
 				EnemyManager::EnemyUpdate(Map::_mapData, bgW, bgH, minMapSize);
 			}
 			else {
@@ -110,6 +116,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			MapObj->MapShow(Map::_mapData, minMapSize);
 			EnemyManager::EnemyUpdateShow();
+			BulletManager::BulletUpdateShow();
 			PlayerObj->Show();
 			if (Map::_isEditor) {
 				MapObj->MapEditorShow(bgW, bgH, minMapSize, UI_Game::_mapEditorIndex);
@@ -128,8 +135,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		case Scene::GameOver:
 			PlayerObj->Dead();
 			EnemyManager::EnemyUpdate(Map::_mapData, bgW, bgH, minMapSize);
+			BulletManager::BulletUpdate(Map::_mapData, bgW, bgH, minMapSize);
 			MapObj->MapShow(Map::_mapData, minMapSize);
 			EnemyManager::EnemyUpdateShow();
+			BulletManager::BulletUpdateShow();
 			PlayerObj->Show();
 			SceneObj->SceneGameOver(mouseX, mouseY, preKeys, keys);
 			break;

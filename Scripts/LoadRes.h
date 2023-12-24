@@ -31,6 +31,9 @@ public:
 	inline static map<int, SpriteList> _sl_playerRun_L;
 	inline static map<int, SpriteList> _sl_playerRun_R;
 
+	//Bullet
+	inline static Sprite _sp_Bullet;
+
 	//Enemy
 	inline static Sprite _sp_EnemyMother;
 	inline static map<int, SpriteList> _sl_Enemy_L;

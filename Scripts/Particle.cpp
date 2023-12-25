@@ -42,7 +42,7 @@ void Particle::Inital(Vector2 pos, TYPE type)
 		std::uniform_real_distribution dis_dirY(-0.5f, 2.f);
 		_dir = { dis_dirX(gen), dis_dirY(gen) };
 		_radius = 1;
-		_color = RED;
+		_color = 0xfff59dff;
 		std::uniform_int_distribution dis_life(10, 20);
 		_lifeTime = dis_life(gen);
 		break; }
@@ -74,10 +74,10 @@ void Particle::Move()
 		}
 		_vel.y += 0.1f;
 		_pos = { _pos.x + _vel.x,_pos.y + _vel.y };
-		_scale.x += 0.1f;
-		_scale.y += 0.1f;
+		_scale.x += 0.05f;
+		_scale.y += 0.05f;
 		float steps = float(_currentTime) / float(_lifeTime);
-		_color = ColorInterpolation(RED, BLACK, steps);
+		_color = ColorInterpolation(0xfff59dff, 0xbdbdbdff, steps);
 
 		break; }
 	}

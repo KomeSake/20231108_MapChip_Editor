@@ -29,11 +29,21 @@ void Particle::Inital(Vector2 pos, TYPE type)
 		std::uniform_real_distribution dis_dirX(-1.f, 1.f);
 		std::uniform_real_distribution dis_dirY(-0.5f, 2.f);
 		_dir = { dis_dirX(gen), dis_dirY(gen) };
-		_radius = 6;
+		_radius = 3;
 		std::uniform_real_distribution dis_angle(-10.f, 10.f);
 		_angle = dis_angle(gen);
-		_color = 0xfdd835ff;
-		std::uniform_int_distribution dis_life(20, 30);
+		_color = WHITE;
+		std::uniform_int_distribution dis_life(5, 10);
+		_lifeTime = dis_life(gen);
+		break; }
+	case gunFire: {
+		_speed = 0.01f;
+		std::uniform_real_distribution dis_dirX(-1.f, 1.f);
+		std::uniform_real_distribution dis_dirY(-0.5f, 2.f);
+		_dir = { dis_dirX(gen), dis_dirY(gen) };
+		_radius = 1;
+		_color = RED;
+		std::uniform_int_distribution dis_life(10, 20);
 		_lifeTime = dis_life(gen);
 		break; }
 	}
@@ -55,7 +65,24 @@ void Particle::Move()
 		_vel.y -= 0.5f;
 		_pos = { _pos.x + _vel.x,_pos.y + _vel.y };
 		break; }
+	case gunFire: {
+		_acc.x = _dir.x * _speed;
+		_acc.y = _dir.y * _speed;
+		if (_currentTime < 10) {
+			_vel.x += _acc.x;
+			_vel.y += _acc.y;
+		}
+		_vel.y += 0.1f;
+		_pos = { _pos.x + _vel.x,_pos.y + _vel.y };
+		_scale.x += 0.1f;
+		_scale.y += 0.1f;
+		float steps = float(_currentTime) / float(_lifeTime);
+		_color = ColorInterpolation(RED, BLACK, steps);
+
+		break; }
 	}
+
+	_currentTime++;
 }
 
 void Particle::Show()
@@ -64,6 +91,9 @@ void Particle::Show()
 	switch (_type) {
 	case bulletDead:
 		Novice::DrawBox(int(screenPos.x), int(screenPos.y), int(_radius * _scale.x), int(_radius * _scale.y), _angle, _color, kFillModeSolid);
+		break;
+	case gunFire:
+		Novice::DrawEllipse(int(screenPos.x), int(screenPos.y), int(_radius * _scale.x), int(_radius * _scale.y), _angle, _color, kFillModeSolid);
 		break;
 	}
 }
@@ -88,6 +118,7 @@ Emitter::Emitter(Vector2 pos, TYPE type)
 void Emitter::Inital(Vector2 pos, TYPE type)
 {
 	_pos = pos;
+	_scale = { 1,1 };
 	_type = type;
 	_isDead = false;
 	_color = WHITE;
@@ -103,6 +134,12 @@ void Emitter::Inital(Vector2 pos, TYPE type)
 		_height = 5;
 		_particleSum = 12;
 		break;
+	case gunFire:
+		_width = 25;
+		_height = 25;
+		_particleSum = 1;
+		_lifeTime = 2;
+		_color = 0xfff59dff;
 	}
 }
 
@@ -125,6 +162,10 @@ void Emitter::ParticleStart()
 				element = ParticleManager::AcquireParticle(randomPos, Particle::bulletDead);
 				element->Instantiated();
 				break;
+			case gunFire:
+				element = ParticleManager::AcquireParticle(randomPos, Particle::gunFire);
+				element->Instantiated();
+				break;
 			}
 		}
 	}
@@ -143,6 +184,12 @@ void Emitter::ParticleStart()
 
 void Emitter::Show()
 {
+	Vector2 screenPos = MyTools::WorldToScreen(_pos.x, _pos.y);
+	switch (_type) {
+	case gunFire:
+		Novice::DrawEllipse(int(screenPos.x), int(screenPos.y), int(_width / 2 * _scale.x), int(_height / 2 * _scale.y), _angle, _color, kFillModeSolid);
+		break;
+	}
 }
 
 void Emitter::Dead()
@@ -174,18 +221,18 @@ void ParticleManager::ParticleUpdateShow()
 
 Particle* ParticleManager::AcquireParticle(Vector2 startPos, Particle::TYPE type)
 {
-	if (_particleIdiePool.empty()) {
-		Particle* par = new Particle(startPos, type);
-		return par;
-	}
-	else {
-		Particle* par = _particleIdiePool.front();
-		_particleIdiePool.pop();
-		par->Inital(startPos, type);
-		return par;
-	}
-	//Particle* par = new Particle(startPos, type);
-	//return par;
+	//if (_particleIdiePool.empty()) {
+	//	Particle* par = new Particle(startPos, type);
+	//	return par;
+	//}
+	//else {
+	//	Particle* par = _particleIdiePool.front();
+	//	_particleIdiePool.pop();
+	//	par->Inital(startPos, type);
+	//	return par;
+	//}
+	Particle* par = new Particle(startPos, type);
+	return par;
 }
 
 void ParticleManager::ReleaseParticle(Particle* particle)
@@ -215,19 +262,19 @@ void ParticleManager::EmitterUpdateShow()
 
 Emitter* ParticleManager::AcquireEmitter(Vector2 pos, Emitter::TYPE type)
 {
-	if (_emitterIdiePool.empty()) {
-		return new Emitter(pos, type);
-	}
-	else {
-		Emitter* emi = _emitterIdiePool.front();
-		_emitterIdiePool.pop();
-		emi->Inital(pos, type);
-		return emi;
-	}
+	//if (_emitterIdiePool.empty()) {
+	//	return new Emitter(pos, type);
+	//}
+	//else {
+	//	Emitter* emi = _emitterIdiePool.front();
+	//	_emitterIdiePool.pop();
+	//	emi->Inital(pos, type);
+	//	return emi;
+	//}
 
 	//バッグがあるので、一応こんな感じにする
-	//Emitter* emi = new Emitter(pos, type);
-	//return emi;
+	Emitter* emi = new Emitter(pos, type);
+	return emi;
 }
 
 void ParticleManager::ReleaseEmitter(Emitter* emitter)

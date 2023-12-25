@@ -64,7 +64,8 @@ public:
 	//毎回Enemyは復活する時、もし一番目のフレームからプレイしたいなら、この変数に0を代入する
 	int _frameAniIndex[_frame_sum] = { 0 };
 
-
+	//色を変える関数(元の色、目標の色、今の変えるパーセント)
+	unsigned int ColorInterpolation(unsigned int startColor, unsigned int targetColor, float percent);
 
 
 

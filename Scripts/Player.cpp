@@ -24,10 +24,11 @@ void Player::Initial()
 	_rad = 0;
 
 	_hp = 10;
-	_damage = 2;
+	_damage = 10;
 	_attackTime = 100;
 
 	_isJump = false;
+	_isAttack = false;
 	_isLeft = false;
 	_isGod = false;
 	_isDead = false;
@@ -49,11 +50,15 @@ void Player::Move(char prekeys[], char keys[], vector<vector<char>> mapData, flo
 	}
 	if (keys[DIK_A]) {
 		_dir.x = -1;
-		_isLeft = true;
+		if (!_isAttack) {
+			_isLeft = true;
+		}
 	}
 	else if (keys[DIK_D]) {
 		_dir.x = 1;
-		_isLeft = false;
+		if (!_isAttack) {
+			_isLeft = false;
+		}
 	}
 	else {
 		_dir.x = 0;
@@ -69,8 +74,14 @@ void Player::Move(char prekeys[], char keys[], vector<vector<char>> mapData, flo
 	int playerCheckRow = (int)((bgH - _pos.y) / minMapSize);
 	int playerCheckLine = (int)(_pos.x / minMapSize);
 	//然后X轴开始移动
-
-	_acc.x = _dir.x * _speed;
+	if (!_isAttack) {
+		_acc.x = _dir.x * _speed;
+	}
+	else {
+		_acc.x = _dir.x * _speed * 0.7f;
+		int attackDir = _isLeft ? -1 : 1;
+		_acc.x -= attackDir * _speed * 0.1f;//攻击的后坐力
+	}
 	if (_vel.x<_velMax && _vel.x>-_velMax) {
 		_vel.x += _acc.x;
 	}
@@ -186,10 +197,20 @@ void Player::Collide()
 
 void Player::Attack()
 {
-	if (Novice::IsPressMouse(0) && MyTimers(_attackTime, 2)) {
-		bool isBulletLeft = _isLeft ? 0 : 1;
-		BulletManager::AcquireBullet(_pos.x, _pos.y, isBulletLeft);
-		ParticleManager::ADD_Particle(_pos.x, _pos.y, Emitter::bulletDead);
+	_isAttack = false;
+	if (Novice::IsPressMouse(0)) {
+		_isAttack = true;
+		if (MyTimers(_attackTime, 2)) {
+			bool isBulletLeft = _isLeft ? 0 : 1;
+			int attackLength = _isLeft ? -40 : 40;
+			int gunFireLength = _isLeft ? -30 : 30;
+			int gunFireRandomY = 3;//枪炮的效果给一个上下的随机偏移
+			std::random_device rd;
+			std::mt19937 gen(rd());
+			std::uniform_int_distribution dis_moveY(-gunFireRandomY, gunFireRandomY);
+			BulletManager::AcquireBullet(_pos.x + attackLength, _pos.y, isBulletLeft);
+			ParticleManager::ADD_Particle(_pos.x + gunFireLength, _pos.y + dis_moveY(rd), Emitter::gunFire);
+		}
 	}
 }
 
@@ -203,7 +224,7 @@ void Player::Show()
 	}
 
 	if (!_isLeft) {
-		if (_vel.x < 0.5f) {
+		if (_vel.x <0.5f && _vel.x>-0.5f) {
 			FrameAnimation(_pos.x, _pos.y, LoadRes::_sl_playerIdle_R, _rad, _color, 300, 0);
 		}
 		else {
@@ -211,11 +232,11 @@ void Player::Show()
 		}
 	}
 	else {
-		if (_vel.x < -0.5f) {
-			FrameAnimation(_pos.x, _pos.y, LoadRes::_sl_playerRun_L, _rad, _color, 100, 0);
+		if (_vel.x <0.5f && _vel.x>-0.5f) {
+			FrameAnimation(_pos.x, _pos.y, LoadRes::_sl_playerIdle_L, _rad, _color, 300, 0);
 		}
 		else {
-			FrameAnimation(_pos.x, _pos.y, LoadRes::_sl_playerIdle_L, _rad, _color, 300, 0);
+			FrameAnimation(_pos.x, _pos.y, LoadRes::_sl_playerRun_L, _rad, _color, 100, 0);
 		}
 	}
 }

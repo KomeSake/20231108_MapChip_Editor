@@ -10,6 +10,7 @@ public:
 	static enum TYPE
 	{
 		bulletDead,
+		gunFire,
 	}_particleType;
 
 	Vector2 _pos;
@@ -46,6 +47,7 @@ public:
 	static enum TYPE
 	{
 		bulletDead,
+		gunFire,
 	}_particleType;
 
 	Vector2 _pos;
@@ -53,6 +55,7 @@ public:
 	unsigned int _color;
 	float _width;//粒子が出る位置の範囲
 	float _height;
+	Vector2 _scale;
 
 	TYPE _type;
 	int _currentTime;

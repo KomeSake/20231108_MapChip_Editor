@@ -9,7 +9,7 @@ void Bullet::Initial()
 {
 	_pos = { -100,-100 };
 	_dir = { 0,0 };
-	_speed = 10;
+	_speed = 15;
 
 	_width = 16;
 	_height = 16;
@@ -64,6 +64,7 @@ void Bullet::Move(vector<vector<char>> mapData, float bgW, float bgH, float minM
 
 void Bullet::Dead()
 {
+	ParticleManager::ADD_Particle(_pos.x, _pos.y, Emitter::bulletDead);
 	BulletManager::ReleaseBullet(this);
 }
 

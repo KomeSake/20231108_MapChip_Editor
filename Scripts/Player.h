@@ -6,6 +6,7 @@
 #include "Particle.h"
 #include <cmath>
 #include <vector>
+#include <random>
 using namespace std;
 
 class Player :
@@ -33,6 +34,7 @@ public:
 	int _attackTime;
 
 	bool _isJump;
+	bool _isAttack;
 	bool _isLeft;
 	bool _isGod;//是否处于无敌状态
 	bool _isDead;

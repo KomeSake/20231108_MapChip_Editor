@@ -206,3 +206,25 @@ float MyTools::SpriteToObjDir(Vector2 dir)
 	rad = -(acosf(-1) / 180 * degree);
 	return rad;
 }
+
+unsigned int MyTools::ColorInterpolation(unsigned int startColor, unsigned int targetColor, float percent)
+{
+	uint8_t startAlpha = (startColor >> 24) & 0xFF;
+	uint8_t startRed = (startColor >> 16) & 0xFF;
+	uint8_t startGreen = (startColor >> 8) & 0xFF;
+	uint8_t startBlue = startColor & 0xFF;
+
+	uint8_t targetAlpha = (targetColor >> 24) & 0xFF;
+	uint8_t targetRed = (targetColor >> 16) & 0xFF;
+	uint8_t targetGreen = (targetColor >> 8) & 0xFF;
+	uint8_t targetBlue = targetColor & 0xFF;
+
+	uint8_t currentAlpha = uint8_t(startAlpha + percent * (targetAlpha - startAlpha));
+	uint8_t currentRed = uint8_t(startRed + percent * (targetRed - startRed));
+	uint8_t currentGreen = uint8_t(startGreen + percent * (targetGreen - startGreen));
+	uint8_t currentBlue = uint8_t(startBlue + percent * (targetBlue - startBlue));
+
+	unsigned int returnColor = (currentAlpha << 24) | (currentRed << 16) | (currentGreen << 8) | currentBlue;
+
+	return returnColor;
+}

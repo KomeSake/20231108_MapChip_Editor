@@ -22,7 +22,7 @@ void Enemy::Initial()
 	_sprite = LoadRes::_sl_Enemy_R;
 	_color = WHITE;
 
-	_hp = 2;
+	_hp = 10;
 	_damage = 1;
 
 	_isLeft = true;

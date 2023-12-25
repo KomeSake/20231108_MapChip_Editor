@@ -32,6 +32,7 @@ public:
 	bool _isJump;
 	bool _isDead;
 	bool _isHurt;
+	bool _isDeadOffset;//为了给摄像机抖动使用
 
 	Enemy();
 	void Initial();
@@ -59,4 +60,5 @@ public:
 	static void ReleaseEnemy(Enemy* enemy);
 
 	void EnemyBornToMap(vector<vector<char>>mapData, float bgW, float bgH, float minSize);
+	static bool IsEnemyDeadOffset();
 };

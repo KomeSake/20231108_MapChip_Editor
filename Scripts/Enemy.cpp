@@ -28,6 +28,7 @@ void Enemy::Initial()
 	_isLeft = true;
 	_isJump = false;
 	_isDead = false;
+	_isHurt = false;
 
 	//随机算出一开始往左还是往右
 	std::random_device rd;
@@ -121,6 +122,28 @@ void Enemy::Move(vector<vector<char>> mapData, float bgW, float bgH, float minMa
 	}
 }
 
+void Enemy::Collide()
+{
+	for (Bullet* it : BulletManager::_bulletUpdateVector) {
+		if (!it->_isDead) {
+			float length = sqrtf(powf(it->_pos.x - _pos.x, 2) + powf(it->_pos.y - _pos.y, 2));
+			if (length < it->_width / 2 + _width / 2) {
+				_hp -= it->_damage;
+				it->_isDead = true;
+				_isHurt = true;
+				if (it->_dir.x > 0) {
+					_pos.x += 10;
+					ParticleManager::ADD_Particle(_pos.x - 10, _pos.y, Emitter::enemyHurtL);
+				}
+				else if (it->_dir.x < 0) {
+					_pos.x -= 10;
+					ParticleManager::ADD_Particle(_pos.x + 10, _pos.y, Emitter::enemyHurtR);
+				}
+			}
+		}
+	}
+}
+
 void Enemy::Dead()
 {
 	if (_hp <= 0 && !_isDead) {
@@ -145,6 +168,13 @@ void Enemy::Dead()
 
 void Enemy::Show()
 {
+	if (_isHurt) {
+		_color = BLUE;
+		if (MyTimers(100, 1)) {
+			_isHurt = false;
+			_color = WHITE;
+		}
+	}
 	if (_vel.x >= 0) {
 		FrameAnimation(_pos.x, _pos.y, LoadRes::_sl_Enemy_R, _rad, _color, 100, 0);
 	}
@@ -164,6 +194,7 @@ void EnemyManager::EnemyUpdate(vector<vector<char>>mapData, float bgW, float bgH
 	for (Enemy* it : _enemyUpdateVector) {
 		if (!it->_isDead) {
 			it->Move(mapData, bgW, bgH, minSize);
+			it->Collide();
 		}
 		it->Dead();
 	}

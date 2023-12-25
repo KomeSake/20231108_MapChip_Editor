@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include "MyTools.h"
 #include "Map.h"
+#include "Bullet.h"
+#include "Particle.h"
 #include <vector>
 #include <queue>
 #include <random>
@@ -29,6 +31,7 @@ public:
 	bool _isLeft;
 	bool _isJump;
 	bool _isDead;
+	bool _isHurt;
 
 	Enemy();
 	void Initial();

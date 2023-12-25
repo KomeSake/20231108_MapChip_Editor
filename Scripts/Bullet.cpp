@@ -70,15 +70,7 @@ void Bullet::Dead()
 
 void Bullet::Collide()
 {
-	for (Enemy* it : EnemyManager::_enemyUpdateVector) {
-		if (!it->_isDead) {
-			float length = sqrtf(powf(it->_pos.x - _pos.x, 2) + powf(it->_pos.y - _pos.y, 2));
-			if (length < it->_width / 2 + _width / 2) {
-				it->_hp -= _damage;
-				_isDead = true;
-			}
-		}
-	}
+	//移动到Enemy类的同名方法中了
 }
 
 void Bullet::Show()

@@ -107,7 +107,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				PlayerObj->Attack();
 				BulletManager::BulletUpdate(Map::_mapData, bgW, bgH, minMapSize);
 				EnemyManager::EnemyUpdate(Map::_mapData, bgW, bgH, minMapSize);
-				ParticleManager::Update();
+				ParticleManager::Update(Map::_mapData, bgW, bgH, minMapSize);
 			}
 			else {
 				Map::MapEditor(Map::_mapData, bgH, minMapSize, screenW, screenH, UI_Game::_mapEditorIndex);

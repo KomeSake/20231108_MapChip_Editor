@@ -5,7 +5,6 @@
 #include <cmath>
 #include "MyTools.h"
 #include "Map.h"
-#include "Enemy.h"
 #include "Particle.h"
 class Bullet :
 	public MyTools

@@ -3,6 +3,7 @@
 #include <queue>
 #include <random>
 #include "MyTools.h"
+#include "Map.h"
 class Particle :
 	public MyTools
 {
@@ -13,6 +14,7 @@ public:
 		gunFire,
 		playerJump,
 		enemyHurtL,
+		enemyHurtR,
 	}_particleType;
 
 	Vector2 _pos;
@@ -35,11 +37,12 @@ public:
 
 	Particle(Vector2 pos, TYPE type);
 	void Inital(Vector2 pos, TYPE type);
-	void Move();
+	void Move(vector<vector<char>> mapData, float bgW, float bgH, float minMapSize);
 	void Show();
 	void Dead();
 	void Instantiated();
-
+	//判断中心点是否和不可通过的地图块碰撞了
+	bool IsMapTouch(vector<vector<char>> mapData, float bgW, float bgH, float minMapSize);
 };
 
 class Emitter :
@@ -52,6 +55,7 @@ public:
 		gunFire,
 		playerJump,
 		enemyHurtL,
+		enemyHurtR,
 	}_particleType;
 
 	Vector2 _pos;
@@ -88,7 +92,7 @@ public:
 	inline static std::vector<Emitter*> _emitterUpadtePool;
 	inline static std::queue<Emitter*> _emitterIdiePool;
 
-	static void ParticleUpdate();
+	static void ParticleUpdate(vector<vector<char>> mapData, float bgW, float bgH, float minMapSize);
 	static void ParticleUpdateShow();
 	static Particle* AcquireParticle(Vector2 startPos, Particle::TYPE type);
 	static void ReleaseParticle(Particle* particle);
@@ -101,7 +105,7 @@ public:
 	//普通のパーティクル：位置、Type
 	static void ADD_Particle(float posX, float posY, Emitter::TYPE type);
 	//更新用関数
-	static void Update();
+	static void Update(vector<vector<char>> mapData, float bgW, float bgH, float minMapSize);
 	//描画用関数
 	static void Show();
 };

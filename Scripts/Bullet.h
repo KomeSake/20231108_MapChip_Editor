@@ -2,8 +2,10 @@
 #include <vector>
 #include <queue>
 #include <random>
+#include <cmath>
 #include "MyTools.h"
 #include "Map.h"
+#include "Enemy.h"
 class Bullet :
 	public MyTools
 {
@@ -26,6 +28,7 @@ public:
 	void Initial();
 	void Move(vector<vector<char>>mapData, float bgW, float bgH, float minMapSize);
 	void Dead();
+	void Collide();
 	void Show();
 	void Instantiated(float posX, float posY, bool isLeft);
 };

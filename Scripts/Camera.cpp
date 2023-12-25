@@ -7,8 +7,8 @@ Camera::Camera(const int screenW, const int screenH, int bgW, int bgH)
 	_screenWidth = (float)screenW;
 	_screenHeight = (float)screenH;
 
-	_randomMoveX = 2;
-	_randomMoveY = 2;
+	_randomMoveX = 1;
+	_randomMoveY = 1;
 
 	_pos = { _screenWidth / 2,_screenHeight / 2 };
 	_playerPos = { _screenWidth / 2,_screenHeight / 2 };

@@ -3,6 +3,7 @@
 #include "Map.h"
 #include "Enemy.h"
 #include "Bullet.h"
+#include "Particle.h"
 #include <cmath>
 #include <vector>
 using namespace std;

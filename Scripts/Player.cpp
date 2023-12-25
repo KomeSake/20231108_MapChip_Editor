@@ -189,6 +189,7 @@ void Player::Attack()
 	if (Novice::IsPressMouse(0) && MyTimers(_attackTime, 2)) {
 		bool isBulletLeft = _isLeft ? 0 : 1;
 		BulletManager::AcquireBullet(_pos.x, _pos.y, isBulletLeft);
+		ParticleManager::ADD_Particle(_pos.x, _pos.y, Emitter::bulletDead);
 	}
 }
 

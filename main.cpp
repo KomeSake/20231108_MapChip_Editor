@@ -7,6 +7,7 @@
 #include "Scripts/Map.h"
 #include "Scripts/Enemy.h"
 #include "Scripts/Bullet.h"
+#include "Scripts/Particle.h"
 
 
 const char kWindowTitle[] = "LC1A_16_ソウ_チョウキ";
@@ -59,6 +60,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			BulletManager::_bulletUpdateVector.clear();
 			EnemyManager::_enemyUpdateVector.clear();
+			ParticleManager::_particleUpdatePool.clear();
+			ParticleManager::_emitterUpadtePool.clear();
 			PlayerObj = new Player();
 			CameraObj = new Camera(screenW, screenH, bgW, bgH);
 			SceneObj->_sceneIndex = SceneObj->Game;
@@ -103,6 +106,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				PlayerObj->Attack();
 				BulletManager::BulletUpdate(Map::_mapData, bgW, bgH, minMapSize);
 				EnemyManager::EnemyUpdate(Map::_mapData, bgW, bgH, minMapSize);
+				ParticleManager::Update();
 			}
 			else {
 				Map::MapEditor(Map::_mapData, bgH, minMapSize, screenW, screenH, UI_Game::_mapEditorIndex);
@@ -118,6 +122,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			EnemyManager::EnemyUpdateShow();
 			BulletManager::BulletUpdateShow();
 			PlayerObj->Show();
+			ParticleManager::Show();
 			if (Map::_isEditor) {
 				MapObj->MapEditorShow(bgW, bgH, minMapSize, UI_Game::_mapEditorIndex);
 			}
@@ -149,7 +154,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		//Debug情報
 		//Novice::ScreenPrintf(10, 10, "Player(%d,%d)", int(PlayerObj->_pos.x), int(PlayerObj->_pos.y));
-		Novice::ScreenPrintf(10, 30, "Camera(%d,%d)", int(CameraObj->_pos.x), int(CameraObj->_pos.y));
+		//Novice::ScreenPrintf(10, 30, "Camera(%d,%d)", int(CameraObj->_pos.x), int(CameraObj->_pos.y));
 		//Novice::ScreenPrintf(10, 750, "Mouse(%d,%d)", mouseX, mouseY);
 
 		// フレームの終了

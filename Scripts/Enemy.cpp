@@ -29,6 +29,7 @@ void Enemy::Initial()
 	_isJump = false;
 	_isDead = false;
 	_isHurt = false;
+	_isDeadOffset = false;
 
 	//随机算出一开始往左还是往右
 	std::random_device rd;
@@ -146,10 +147,14 @@ void Enemy::Collide()
 
 void Enemy::Dead()
 {
+	if (_isDeadOffset) {
+		_isDeadOffset = false;
+	}
 	if (_hp <= 0 && !_isDead) {
 		_vel.y = _jumpSpeed * 0.9f;
 		Novice::PlayAudio(LoadRes::_audio_enemyDead, 0, 1);
 		_isDead = true;
+		_isDeadOffset = true;
 	}
 	if (_isDead) {
 		_color = RED;
@@ -253,4 +258,14 @@ void EnemyManager::EnemyBornToMap(vector<vector<char>> mapData, float bgW, float
 			minMapPos.y -= minSize;
 		}
 	}
+}
+
+bool EnemyManager::IsEnemyDeadOffset()
+{
+	for (Enemy* it : _enemyUpdateVector) {
+		if (it->_isDeadOffset) {
+			return true;
+		}
+	}
+	return false;
 }

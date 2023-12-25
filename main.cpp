@@ -101,7 +101,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			if (!Map::_isEditor) {
 				PlayerObj->Move(preKeys, keys, Map::_mapData, bgW, bgH, minMapSize);
-				CameraObj->Move(PlayerObj->_pos);
+				CameraObj->Move(PlayerObj->_pos, EnemyManager::IsEnemyDeadOffset());
 				MyTools::CheckCameraValume(CameraObj->_pos, screenW, screenH);
 				EnemyManagerObj->EnemyBornToMap(Map::_mapData, bgW, bgH, minMapSize);
 				PlayerObj->Attack();

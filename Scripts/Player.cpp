@@ -41,6 +41,7 @@ void Player::Move(char prekeys[], char keys[], vector<vector<char>> mapData, flo
 		Novice::PlayAudio(LoadRes::_audio_jump, 0, 1);
 		_isJump = true;
 		_dir.y = 1;
+		ParticleManager::ADD_Particle(_pos.x, _pos.y - 16, Emitter::playerJump);
 	}
 	else if (keys[DIK_S]) {
 		//_dir.y = -1;
@@ -169,6 +170,7 @@ void Player::Collide()
 					//踩中了自己还会跳一下
 					_vel.y = _jumpSpeed;
 					Novice::PlayAudio(LoadRes::_audio_attack, 0, 1);
+					ParticleManager::ADD_Particle(_pos.x, _pos.y - 16, Emitter::playerJump);
 					continue;
 				}
 			}

@@ -37,9 +37,9 @@ void Map::MapShow(vector<vector<char>>& mapData, float minMapSize)
 	for (int i = 0; i < mapLine; i++) {
 		for (int j = 0; j < mapRow; j++) {
 			switch (mapData[i][j]) {
-			case '0':
-				FrameTexture(j * minMapSize + minMapSize / 2, bgH - i * minMapSize - minMapSize / 2, LoadRes::_sl_map, 0, WHITE);
-				break;
+				//case '0':
+				//	FrameTexture(j * minMapSize + minMapSize / 2, bgH - i * minMapSize - minMapSize / 2, LoadRes::_sl_map, 0, WHITE);
+				//	break;
 			case '1':
 				//FrameTexture(j * minMapSize + minMapSize / 2, bgH - i * minMapSize - minMapSize / 2, LoadRes::_map1, WHITE);
 				FrameTexture(j * minMapSize + minMapSize / 2, bgH - i * minMapSize - minMapSize / 2, LoadRes::_sl_map, 1, WHITE);
@@ -101,6 +101,22 @@ void Map::LoaclMapSave(string name, vector<vector<char>>& mapData)
 	}
 
 	file.close();
+}
+
+void Map::MapShowDown(vector<vector<char>>& mapData, float minMapSize)
+{
+	int mapLine = int(mapData.size());
+	int mapRow = int(mapData[0].size());
+	float bgH = mapLine * minMapSize;
+	for (int i = 0; i < mapLine; i++) {
+		for (int j = 0; j < mapRow; j++) {
+			switch (mapData[i][j]) {
+			case '0':
+				FrameTexture(j * minMapSize + minMapSize / 2, bgH - i * minMapSize - minMapSize / 2, LoadRes::_sl_map, 0, WHITE);
+				break;
+			}
+		}
+	}
 }
 
 void Map::MapEditorShow(int bgW, int bgH, float minMapSize, UI_Game::MapEditorIndex mapEditorIndex)

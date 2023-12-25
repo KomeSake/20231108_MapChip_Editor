@@ -11,6 +11,8 @@ public:
 	{
 		bulletDead,
 		gunFire,
+		playerJump,
+		enemyHurtL,
 	}_particleType;
 
 	Vector2 _pos;
@@ -48,6 +50,8 @@ public:
 	{
 		bulletDead,
 		gunFire,
+		playerJump,
+		enemyHurtL,
 	}_particleType;
 
 	Vector2 _pos;

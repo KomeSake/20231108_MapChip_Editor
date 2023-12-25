@@ -46,6 +46,21 @@ void Particle::Inital(Vector2 pos, TYPE type)
 		std::uniform_int_distribution dis_life(10, 20);
 		_lifeTime = dis_life(gen);
 		break; }
+	case playerJump: {
+		_speed = 0.1f;
+		std::uniform_real_distribution dis_dirX(-1.f, 1.f);
+		std::uniform_real_distribution dis_dirY(0.f, 2.f);
+		_dir = { dis_dirX(gen), dis_dirY(gen) };
+		_radius = 5;
+		_color = 0xe0e0e0ff;
+		std::uniform_real_distribution dis_scale(1.f, 2.f);
+		_scale = { dis_scale(rd),dis_scale(rd) };
+		std::uniform_int_distribution dis_life(10, 20);
+		_lifeTime = dis_life(gen);
+		break; }
+	case enemyHurtL: {
+
+		break; }
 	}
 }
 
@@ -78,7 +93,19 @@ void Particle::Move()
 		_scale.y += 0.05f;
 		float steps = float(_currentTime) / float(_lifeTime);
 		_color = ColorInterpolation(0xfff59dff, 0xbdbdbdff, steps);
-
+		break; }
+	case playerJump: {
+		_acc.x = _dir.x * _speed;
+		_acc.y = _dir.y * _speed;
+		if (_currentTime < 10) {
+			_vel.x += _acc.x;
+			_vel.y += _acc.y;
+		}
+		_pos = { _pos.x + _vel.x,_pos.y + _vel.y };
+		if (alphaValue > 1) {
+			_color = 0xe0e0e0ff | alphaValue << 0;
+			alphaValue -= 5;
+		}
 		break; }
 	}
 
@@ -93,6 +120,7 @@ void Particle::Show()
 		Novice::DrawBox(int(screenPos.x), int(screenPos.y), int(_radius * _scale.x), int(_radius * _scale.y), _angle, _color, kFillModeSolid);
 		break;
 	case gunFire:
+	case playerJump:
 		Novice::DrawEllipse(int(screenPos.x), int(screenPos.y), int(_radius * _scale.x), int(_radius * _scale.y), _angle, _color, kFillModeSolid);
 		break;
 	}
@@ -140,6 +168,12 @@ void Emitter::Inital(Vector2 pos, TYPE type)
 		_particleSum = 1;
 		_lifeTime = 2;
 		_color = 0xfff59dff;
+		break;
+	case playerJump:
+		_width = 2;
+		_height = 10;
+		_particleSum = 3;
+		break;
 	}
 }
 
@@ -164,6 +198,10 @@ void Emitter::ParticleStart()
 				break;
 			case gunFire:
 				element = ParticleManager::AcquireParticle(randomPos, Particle::gunFire);
+				element->Instantiated();
+				break;
+			case playerJump:
+				element = ParticleManager::AcquireParticle(randomPos, Particle::playerJump);
 				element->Instantiated();
 				break;
 			}

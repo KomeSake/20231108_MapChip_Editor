@@ -70,6 +70,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		case Scene::Start:
 			CameraObj = new Camera(screenW, screenH, bgW, bgH);
 			MyTools::CheckCameraValume(CameraObj->_pos, screenW, screenH);
+			MapObj->MapShowDown(Map::_mapData, minMapSize);
 			MapObj->MapShow(Map::_mapData, minMapSize);
 			SceneObj->SceneStart(preKeys, keys);
 			break;
@@ -118,11 +119,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				SceneObj->_sceneIndex = SceneObj->GameOver;
 			}
 
-			MapObj->MapShow(Map::_mapData, minMapSize);
+			MapObj->MapShowDown(Map::_mapData, minMapSize);
 			EnemyManager::EnemyUpdateShow();
 			BulletManager::BulletUpdateShow();
 			PlayerObj->Show();
 			ParticleManager::Show();
+			MapObj->MapShow(Map::_mapData, minMapSize);
 			if (Map::_isEditor) {
 				MapObj->MapEditorShow(bgW, bgH, minMapSize, UI_Game::_mapEditorIndex);
 			}
@@ -141,10 +143,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			PlayerObj->Dead();
 			EnemyManager::EnemyUpdate(Map::_mapData, bgW, bgH, minMapSize);
 			BulletManager::BulletUpdate(Map::_mapData, bgW, bgH, minMapSize);
-			MapObj->MapShow(Map::_mapData, minMapSize);
+			MapObj->MapShowDown(Map::_mapData, minMapSize);
 			EnemyManager::EnemyUpdateShow();
 			BulletManager::BulletUpdateShow();
 			PlayerObj->Show();
+			MapObj->MapShow(Map::_mapData, minMapSize);
 			SceneObj->SceneGameOver(mouseX, mouseY, preKeys, keys);
 			break;
 		}

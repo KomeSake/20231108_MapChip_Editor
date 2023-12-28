@@ -212,6 +212,12 @@ void Player::Attack()
 			std::uniform_int_distribution dis_moveY(-gunFireRandomY, gunFireRandomY);
 			BulletManager::AcquireBullet(_pos.x + attackLength, _pos.y, isBulletLeft);
 			ParticleManager::ADD_Particle(_pos.x + gunFireLength, _pos.y + dis_moveY(rd), Emitter::gunFire);
+			if (_isLeft) {
+				ParticleManager::ADD_Particle(_pos.x + gunFireLength + 40, _pos.y + dis_moveY(rd), Emitter::bulletShellL);
+			}
+			else {
+				ParticleManager::ADD_Particle(_pos.x + gunFireLength - 40, _pos.y + dis_moveY(rd), Emitter::bulletShellR);
+			}
 		}
 	}
 }

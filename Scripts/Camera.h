@@ -24,6 +24,6 @@ public:
 	bool _shakeEnemyDead;
 
 	Camera(const int screenW, const int screenH, int bgW, int bgH);
-	void Move(Vector2 playerPos, bool isEnemyDeadOffset);
+	void Move(Vector2 playerPos, bool isEnemyDeadOffset, bool isCameraShake);
 };
 

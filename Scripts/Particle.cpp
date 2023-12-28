@@ -22,6 +22,7 @@ void Particle::Inital(Vector2 pos, TYPE type)
 	_angle = 0;
 	_scale = { 1,1 };
 	_alphaValue = 255;
+	_isAudio = false;
 
 	switch (_type) {
 	case bulletDead: {
@@ -128,7 +129,7 @@ void Particle::Move(vector<vector<char>> mapData, float bgW, float bgH, float mi
 		_scale.x += 0.05f;
 		_scale.y += 0.05f;
 		float steps = float(_currentTime) / float(_lifeTime);
-		_color = ColorInterpolation(0xfff59dff, 0xbdbdbdff, steps);
+		_color = ColorInterpolation(0xfff59dff, RED, steps);
 		break; }
 	case playerJump: {
 		_acc.x = _dir.x * _speed;
@@ -171,7 +172,7 @@ void Particle::Move(vector<vector<char>> mapData, float bgW, float bgH, float mi
 			_scale.x += 0.1f;
 			break;
 		case 2:
-			_scale.y += 0.1f;
+			_scale.y += 0.05f;
 			break;
 		}
 		break; }
@@ -236,6 +237,13 @@ void Particle::Move(vector<vector<char>> mapData, float bgW, float bgH, float mi
 				_pos.y = backupPos.y;
 				_vel.x *= bounce;
 				_vel.y *= -bounce;
+			}
+		}
+		if (!_isAudio) {
+			if (_vel.x<0.1f && _vel.x>-0.1f
+				|| _vel.y<0.1f && _vel.y>-0.1f) {
+				_isAudio = true;
+				Novice::PlayAudio(LoadRes::_audio_bulletShell, 0, 0.3f);
 			}
 		}
 		break; }
@@ -374,6 +382,7 @@ void Emitter::Inital(Vector2 pos, TYPE type)
 		_width = 5;
 		_height = 5;
 		_particleSum = 1;
+		_particleGetTime = 20;
 		break;
 	case playerRunL:
 	case playerRunR:

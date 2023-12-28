@@ -37,6 +37,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Map* MapObj = new Map();
 	EnemyManager* EnemyManagerObj = new EnemyManager();
 
+	//控制特效或者摄像机的开关
+	bool _isEffect = true;
+	bool _isCameraShake = true;
+
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
 		// フレームの開始
@@ -53,6 +57,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Novice::GetMousePosition(&mouseX, &mouseY);
 		//最底下的背景（防止摄像机抖动的时候露出不好看的背景色）
 		Novice::DrawBox(0, 0, int(screenW), int(screenH), 0, BLACK, kFillModeSolid);
+
 
 		switch (SceneObj->_sceneIndex) {
 		case Scene::Loading:
@@ -98,10 +103,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			else if (!preKeys[DIK_SPACE] && keys[DIK_SPACE]) {
 				Map::_isEditor = true;
 			}
+			//开关
+			if (!preKeys[DIK_1] && keys[DIK_1]) {
+				_isEffect = !_isEffect;
+			}
+			if (!preKeys[DIK_2] && keys[DIK_2]) {
+				_isCameraShake = !_isCameraShake;
+			}
 
 			if (!Map::_isEditor) {
 				PlayerObj->Move(preKeys, keys, Map::_mapData, bgW, bgH, minMapSize);
-				CameraObj->Move(PlayerObj->_pos, EnemyManager::IsEnemyDeadOffset());
+				CameraObj->Move(PlayerObj->_pos, EnemyManager::IsEnemyDeadOffset(), _isCameraShake);
 				MyTools::CheckCameraValume(CameraObj->_pos, screenW, screenH);
 				EnemyManagerObj->EnemyBornToMap(Map::_mapData, bgW, bgH, minMapSize);
 				PlayerObj->Attack();
@@ -123,7 +135,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			EnemyManager::EnemyUpdateShow();
 			BulletManager::BulletUpdateShow();
 			PlayerObj->Show();
-			ParticleManager::Show();
+			if (_isEffect) {
+				ParticleManager::Show();
+			}
 			MapObj->MapShow(Map::_mapData, minMapSize);
 			if (Map::_isEditor) {
 				MapObj->MapEditorShow(bgW, bgH, minMapSize, UI_Game::_mapEditorIndex);
@@ -131,8 +145,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			SceneObj->SceneGame(int(PlayerObj->_hp), Map::_isEditor);
 			Novice::ScreenPrintf(35, 35, "WAD key: Move & Jump");
-			Novice::ScreenPrintf(35, 55, "SPACE key: Map Editor modle");
-			Novice::ScreenPrintf(35, 75, "Editor Modle: Left Mouse to customize map");
+			Novice::ScreenPrintf(35, 55, "Left Mouse: Attack");
+			Novice::ScreenPrintf(35, 75, "SPACE key: Map Editor modle");
+			Novice::ScreenPrintf(35, 95, "Editor Modle: Left Mouse to customize map");
+			if (_isEffect) {
+				Novice::ScreenPrintf(570, 55, "1 key: Particle = true");
+			}
+			else {
+				Novice::ScreenPrintf(570, 55, "1 key: Particle = false");
+			}
+			if (_isCameraShake) {
+				Novice::ScreenPrintf(570, 75, "2 key: CameraShake = true");
+			}
+			else {
+				Novice::ScreenPrintf(570, 75, "2 key: CameraShake = false");
+			}
 
 			if (!Novice::IsPlayingAudio(bgmLoopHandle) || bgmLoopHandle == -1) {
 				bgmLoopHandle = Novice::PlayAudio(LoadRes::_audio_bgm, 0, 1);

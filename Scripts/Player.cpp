@@ -57,14 +57,12 @@ void Player::Move(char prekeys[], char keys[], vector<vector<char>> mapData, flo
 		if (!_isAttack) {
 			_isLeft = true;
 		}
-		ParticleManager::ADD_Particle(_pos.x, _pos.y - 16, Emitter::playerRunL);
 	}
 	else if (keys[DIK_D]) {
 		_dir.x = 1;
 		if (!_isAttack) {
 			_isLeft = false;
 		}
-		ParticleManager::ADD_Particle(_pos.x, _pos.y - 16, Emitter::playerRunR);
 	}
 	else {
 		_dir.x = 0;
@@ -208,6 +206,7 @@ void Player::Attack()
 	if (Novice::IsPressMouse(0)) {
 		_isAttack = true;
 		if (MyTimers(_attackTime, 2)) {
+			Novice::PlayAudio(LoadRes::_audio_shout, 0, 0.7f);
 			bool isBulletLeft = _isLeft ? 0 : 1;
 			int attackLength = _isLeft ? -40 : 40;
 			int gunFireLength = _isLeft ? -30 : 30;
@@ -258,6 +257,16 @@ void Player::Show()
 		}
 		else {
 			FrameAnimation(_pos.x, _pos.y, LoadRes::_sl_playerRun_L, _rad, _color, 100, 0);
+		}
+	}
+
+	//Run
+	if (_vel.y <0.5f && _vel.y>-0.5f) {
+		if (_vel.x > 0.1f) {
+			ParticleManager::ADD_Particle(_pos.x, _pos.y - 16, Emitter::playerRunL);
+		}
+		else if (_vel.x < -0.1f) {
+			ParticleManager::ADD_Particle(_pos.x, _pos.y - 16, Emitter::playerRunR);
 		}
 	}
 

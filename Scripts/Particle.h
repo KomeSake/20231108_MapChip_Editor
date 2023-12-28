@@ -39,6 +39,8 @@ public:
 	int _currentTime;
 	int _lifeTime;
 
+	bool _isAudio;
+
 	Particle(Vector2 pos, TYPE type);
 	void Inital(Vector2 pos, TYPE type);
 	void Move(vector<vector<char>> mapData, float bgW, float bgH, float minMapSize);

@@ -135,10 +135,12 @@ void Enemy::Collide()
 				if (it->_dir.x > 0) {
 					_pos.x += 10;
 					ParticleManager::ADD_Particle(_pos.x - 10, _pos.y, Emitter::enemyHurtL);
+					Novice::PlayAudio(LoadRes::_audio_enemyHurt, 0, 1);
 				}
 				else if (it->_dir.x < 0) {
 					_pos.x -= 10;
 					ParticleManager::ADD_Particle(_pos.x + 10, _pos.y, Emitter::enemyHurtR);
+					Novice::PlayAudio(LoadRes::_audio_enemyHurt, 0, 1);
 				}
 			}
 		}
@@ -153,6 +155,7 @@ void Enemy::Dead()
 	if (_hp <= 0 && !_isDead) {
 		_vel.y = _jumpSpeed * 0.9f;
 		Novice::PlayAudio(LoadRes::_audio_enemyDead, 0, 1);
+		Novice::PlayAudio(LoadRes::_audio_enemyDead2, 0, 1);
 		_isDead = true;
 		_isDeadOffset = true;
 	}

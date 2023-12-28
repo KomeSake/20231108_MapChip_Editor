@@ -21,34 +21,35 @@ Camera::Camera(const int screenW, const int screenH, int bgW, int bgH)
 	_enemyDeadOffset = { 0,0 };
 }
 
-void Camera::Move(Vector2 playerPos, bool isEnemyDeadOffset)
+void Camera::Move(Vector2 playerPos, bool isEnemyDeadOffset, bool isCameraShake)
 {
-	if (Novice::IsPressMouse(0)) {
-		std::random_device rd;
-		std::mt19937 gen(rd());
-		std::uniform_real_distribution dis_moveX(-_randPlayerAttack, _randPlayerAttack);
-		std::uniform_real_distribution dis_moveY(-_randPlayerAttack, _randPlayerAttack);
-		_playerAttackOffset = { dis_moveX(rd),dis_moveY(rd) };
-	}
-	else {
-		_playerAttackOffset = { 0,0 };
-	}
-	if (isEnemyDeadOffset) {
-		_shakeEnemyDead = true;
-	}
-	if (_shakeEnemyDead) {
-		_currentTime++;
-		if (_currentTime > _enemyDeadTime) {
-			_currentTime = 0;
-			_shakeEnemyDead = false;
+	if (isCameraShake) {
+		if (Novice::IsPressMouse(0)) {
+			std::random_device rd;
+			std::mt19937 gen(rd());
+			std::uniform_real_distribution dis_moveX(-_randPlayerAttack, _randPlayerAttack);
+			std::uniform_real_distribution dis_moveY(-_randPlayerAttack, _randPlayerAttack);
+			_playerAttackOffset = { dis_moveX(rd),dis_moveY(rd) };
 		}
-		std::random_device rd;
-		std::mt19937 gen(rd());
-		std::uniform_real_distribution dis_moveX(-_randEnemyDead, _randEnemyDead);
-		std::uniform_real_distribution dis_moveY(-_randEnemyDead, _randEnemyDead);
-		_enemyDeadOffset = { dis_moveX(rd),dis_moveY(rd) };
+		else {
+			_playerAttackOffset = { 0,0 };
+		}
+		if (isEnemyDeadOffset) {
+			_shakeEnemyDead = true;
+		}
+		if (_shakeEnemyDead) {
+			_currentTime++;
+			if (_currentTime > _enemyDeadTime) {
+				_currentTime = 0;
+				_shakeEnemyDead = false;
+			}
+			std::random_device rd;
+			std::mt19937 gen(rd());
+			std::uniform_real_distribution dis_moveX(-_randEnemyDead, _randEnemyDead);
+			std::uniform_real_distribution dis_moveY(-_randEnemyDead, _randEnemyDead);
+			_enemyDeadOffset = { dis_moveX(rd),dis_moveY(rd) };
+		}
 	}
-
 
 	if (playerPos.x >= _screenWidth / 2 && playerPos.x <= _bgWidth - _screenWidth / 2) {
 		_playerOffset.x = playerPos.x;

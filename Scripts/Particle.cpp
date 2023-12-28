@@ -21,7 +21,7 @@ void Particle::Inital(Vector2 pos, TYPE type)
 	_sprite = {};
 	_angle = 0;
 	_scale = { 1,1 };
-	alphaValue = 255;
+	_alphaValue = 255;
 
 	switch (_type) {
 	case bulletDead: {
@@ -48,14 +48,15 @@ void Particle::Inital(Vector2 pos, TYPE type)
 		break; }
 	case playerJump: {
 		_speed = 0.1f;
-		std::uniform_real_distribution dis_dirX(-1.f, 1.f);
+		std::uniform_real_distribution dis_dirX(-0.7f, 0.7f);
 		std::uniform_real_distribution dis_dirY(0.f, 2.f);
 		_dir = { dis_dirX(gen), dis_dirY(gen) };
-		_radius = 5;
-		_color = 0xe0e0e0ff;
+		_radius = 3;
+		_color = WHITE;
 		std::uniform_real_distribution dis_scale(1.f, 2.f);
-		_scale = { dis_scale(rd),dis_scale(rd) };
-		std::uniform_int_distribution dis_life(10, 20);
+		float randScale = dis_scale(gen);
+		_scale = { randScale,randScale };
+		std::uniform_int_distribution dis_life(40, 60);
 		_lifeTime = dis_life(gen);
 		break; }
 	case enemyHurtL:
@@ -81,6 +82,19 @@ void Particle::Inital(Vector2 pos, TYPE type)
 		_angle = dis_angle(gen);
 		_color = WHITE;
 		_lifeTime = 240;
+		break; }
+	case playerRunL:
+	case playerRunR: {
+		_speed = 0.05f;
+		_dir.x = _type == playerRunL ? 1.f : -1.f;
+		std::uniform_real_distribution dis_dirY(0.f, 1.f);
+		_dir.y = dis_dirY(gen);
+		_radius = 2;
+		_color = 0xe0e0e0ff;
+		std::uniform_real_distribution dis_scale(1.f, 2.f);
+		_scale = { dis_scale(rd),dis_scale(rd) };
+		std::uniform_int_distribution dis_life(5, 10);
+		_lifeTime = dis_life(gen);
 		break; }
 	}
 }
@@ -123,14 +137,24 @@ void Particle::Move(vector<vector<char>> mapData, float bgW, float bgH, float mi
 			_vel.x += _acc.x;
 			_vel.y += _acc.y;
 		}
-		_pos = { _pos.x + _vel.x,_pos.y + _vel.y };
-		if (alphaValue > 1) {
-			_color = 0xe0e0e0ff | alphaValue << 0;
-			alphaValue -= 5;
+		else {
+			_vel.y *= 0.9f;
 		}
+		_pos = { _pos.x + _vel.x,_pos.y + _vel.y };
+		if (_alphaValue > 5) {
+			_color = 0xFFFFFF00 | _alphaValue << 0;
+			_alphaValue -= 5;
+		}
+		_scale.x += 0.01f;
+		_scale.y += 0.01f;
 		break; }
 	case enemyHurtL:
 	case enemyHurtR: {
+		if (_alphaValue > 5 && _currentTime > _lifeTime - 30) {
+			_color = 0xab47bc00 | _alphaValue << 0;
+			_alphaValue -= 5;
+		}
+
 		_acc.x = _dir.x * _speed;
 		_acc.y = _dir.y * _speed;
 		if (_currentTime < 10) {
@@ -153,6 +177,10 @@ void Particle::Move(vector<vector<char>> mapData, float bgW, float bgH, float mi
 		break; }
 	case bulletShellL:
 	case bulletShellR: {
+		if (_alphaValue > 5 && _currentTime > _lifeTime - 30) {
+			_color = 0xFFFFFF00 | _alphaValue << 0;
+			_alphaValue -= 5;
+		}
 		float bounce = 0.6f;
 		float gravity = 0.5f;
 		Vector2 backupPos = { _pos.x,_pos.y };
@@ -211,6 +239,18 @@ void Particle::Move(vector<vector<char>> mapData, float bgW, float bgH, float mi
 			}
 		}
 		break; }
+	case playerRunL:
+	case playerRunR: {
+		_acc.x = _dir.x * _speed;
+		_acc.y = _dir.y * _speed;
+		if (_currentTime < 10) {
+			_vel.x += _acc.x;
+			_vel.y += _acc.y;
+		}
+		_pos = { _pos.x + _vel.x,_pos.y + _vel.y };
+		_scale.x += 0.02f;
+		_scale.y += 0.02f;
+		break; }
 	}
 
 	_currentTime++;
@@ -227,6 +267,8 @@ void Particle::Show()
 	case playerJump:
 	case enemyHurtL:
 	case enemyHurtR:
+	case playerRunL:
+	case playerRunR:
 		Novice::DrawEllipse(int(screenPos.x), int(screenPos.y), int(_radius * _scale.x), int(_radius * _scale.y), _angle, _color, kFillModeSolid);
 		break;
 	case bulletShellL:
@@ -268,17 +310,17 @@ int Particle::IsXYMapTouch(vector<vector<char>> mapData, float bgW, float bgH, f
 	int checkDown = (int)((bgH - _pos.y + _radius - 1) / minMapSize);
 	int checkLeft = (int)((_pos.x - _radius) / minMapSize);
 	int checkRight = (int)((_pos.x + _radius - 1) / minMapSize);
-	if (!Map::IsThrough(mapData, checkUp, checkRight)
-		&& !Map::IsThrough(mapData, checkDown, checkRight)
-		|| !Map::IsThrough(mapData, checkUp, checkLeft)
-		&& !Map::IsThrough(mapData, checkDown, checkLeft)) {
-		return 2;
-	}
-	else if (!Map::IsThrough(mapData, checkUp, checkLeft)
+	if (!Map::IsThrough(mapData, checkUp, checkLeft)
 		&& !Map::IsThrough(mapData, checkUp, checkRight)
 		|| !Map::IsThrough(mapData, checkDown, checkLeft)
 		&& !Map::IsThrough(mapData, checkDown, checkRight)) {
 		return 1;
+	}
+	else if (!Map::IsThrough(mapData, checkUp, checkRight)
+		&& !Map::IsThrough(mapData, checkDown, checkRight)
+		|| !Map::IsThrough(mapData, checkUp, checkLeft)
+		&& !Map::IsThrough(mapData, checkDown, checkLeft)) {
+		return 2;
 	}
 	else {
 		return 0;
@@ -319,7 +361,7 @@ void Emitter::Inital(Vector2 pos, TYPE type)
 	case playerJump:
 		_width = 2;
 		_height = 10;
-		_particleSum = 3;
+		_particleSum = 5;
 		break;
 	case enemyHurtL:
 	case enemyHurtR:
@@ -331,6 +373,12 @@ void Emitter::Inital(Vector2 pos, TYPE type)
 	case bulletShellR:
 		_width = 5;
 		_height = 5;
+		_particleSum = 1;
+		break;
+	case playerRunL:
+	case playerRunR:
+		_width = 2;
+		_height = 10;
 		_particleSum = 1;
 		break;
 	}
@@ -376,6 +424,14 @@ void Emitter::ParticleStart()
 				break;
 			case bulletShellR:
 				element = ParticleManager::AcquireParticle(randomPos, Particle::bulletShellR);
+				element->Instantiated();
+				break;
+			case playerRunL:
+				element = ParticleManager::AcquireParticle(randomPos, Particle::playerRunL);
+				element->Instantiated();
+				break;
+			case playerRunR:
+				element = ParticleManager::AcquireParticle(randomPos, Particle::playerRunR);
 				element->Instantiated();
 				break;
 			}

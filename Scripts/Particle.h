@@ -17,6 +17,8 @@ public:
 		enemyHurtR,
 		bulletShellL,
 		bulletShellR,
+		playerRunL,
+		playerRunR,
 	}_particleType;
 
 	Vector2 _pos;
@@ -32,7 +34,7 @@ public:
 	Vector2 _scale;
 	LoadRes::Sprite _sprite;
 	unsigned int _color;
-	int alphaValue;
+	int _alphaValue;
 
 	int _currentTime;
 	int _lifeTime;
@@ -62,6 +64,8 @@ public:
 		enemyHurtR,
 		bulletShellL,
 		bulletShellR,
+		playerRunL,
+		playerRunR,
 	}_particleType;
 
 	Vector2 _pos;

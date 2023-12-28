@@ -57,12 +57,14 @@ void Player::Move(char prekeys[], char keys[], vector<vector<char>> mapData, flo
 		if (!_isAttack) {
 			_isLeft = true;
 		}
+		ParticleManager::ADD_Particle(_pos.x, _pos.y - 16, Emitter::playerRunL);
 	}
 	else if (keys[DIK_D]) {
 		_dir.x = 1;
 		if (!_isAttack) {
 			_isLeft = false;
 		}
+		ParticleManager::ADD_Particle(_pos.x, _pos.y - 16, Emitter::playerRunR);
 	}
 	else {
 		_dir.x = 0;

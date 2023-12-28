@@ -65,9 +65,22 @@ void Particle::Inital(Vector2 pos, TYPE type)
 		std::uniform_real_distribution dis_dirY(-0.5f, 2.f);
 		_dir.y = dis_dirY(gen);
 		_radius = 3;
-		_color = 0x7b1fa2ff;
+		_color = 0xab47bcff;
 		std::uniform_int_distribution dis_life(40, 60);
 		_lifeTime = dis_life(gen);
+		break; }
+	case bulletShellL:
+	case bulletShellR: {
+		_sprite = LoadRes::_sp_BulletShell;
+		_speed = 0.5f;
+		_dir.x = _type == bulletShellL ? 1.f : -1.f;
+		std::uniform_real_distribution dis_dirY(1.f, 2.f);
+		_dir.y = dis_dirY(gen);
+		_radius = 8;
+		std::uniform_real_distribution dis_angle(-10.f, 10.f);
+		//_angle = dis_angle(gen);
+		_color = WHITE;
+		_lifeTime = 240;
 		break; }
 	}
 }
@@ -141,8 +154,22 @@ void Particle::Move(vector<vector<char>> mapData, float bgW, float bgH, float mi
 			&& !Map::IsThrough(mapData, checkDown, checkRight)) {
 			_scale.x += 0.1f;
 		}
-		else {
-			_pos = { _pos.x + _vel.x,_pos.y + _vel.y };
+		_vel.y -= 0.5f;
+		int checkUp = (int)((bgH - _pos.y - 9) / minMapSize);
+		int checkDown = (int)((bgH - _pos.y + 9 - 1) / minMapSize);
+		int checkLeft = (int)((_pos.x - 7) / minMapSize);
+		int checkRight = (int)((_pos.x + 7 - 1) / minMapSize);
+		if (!Map::IsThrough(mapData, checkUp, checkRight)
+			&& !Map::IsThrough(mapData, checkDown, checkRight)
+			|| !Map::IsThrough(mapData, checkUp, checkLeft)
+			&& !Map::IsThrough(mapData, checkDown, checkLeft)) {
+			_vel.x *= -0.5f;
+		}
+		else if (!Map::IsThrough(mapData, checkUp, checkLeft)
+			&& !Map::IsThrough(mapData, checkUp, checkRight)
+			|| !Map::IsThrough(mapData, checkDown, checkLeft)
+			&& !Map::IsThrough(mapData, checkDown, checkRight)) {
+			_vel.y *= -0.5f;
 		}
 		break; }
 	}

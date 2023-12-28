@@ -62,10 +62,10 @@ void Map::MapShow(vector<vector<char>>& mapData, float minMapSize)
 bool Map::IsThrough(vector<vector<char>> mapData, int line, int row)
 {
 	//首先要判断行列是否超过了容器的大小
-	if (line > mapData.size()) {
+	if (line > mapData.size() - 1) {
 		return false;
 	}
-	if (row > mapData[0].size()) {
+	if (row > mapData[0].size() - 1) {
 		return false;
 	}
 	switch (mapData[line][row]) {

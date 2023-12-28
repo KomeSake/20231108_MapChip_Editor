@@ -38,7 +38,6 @@ void LoadRes::LoadResNovice()
 	}
 	//Bullet
 	_sp_Bullet = { Novice::LoadTexture("./Resources/Textures/Bullet.png"),32,32 };
-	_sp_BulletShell = { Novice::LoadTexture("./Resources/Textures/BulletShell.png"),16,16 };
 	//Enemy
 	_sp_EnemyMother = { Novice::LoadTexture("./Resources/Textures/EnemyMother.png"),32,32 };
 	for (int i = 0; i < 5; i++) {

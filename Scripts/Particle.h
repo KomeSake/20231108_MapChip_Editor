@@ -15,8 +15,6 @@ public:
 		playerJump,
 		enemyHurtL,
 		enemyHurtR,
-		bulletShellL,
-		bulletShellR,
 	}_particleType;
 
 	Vector2 _pos;
@@ -45,8 +43,6 @@ public:
 	void Instantiated();
 	//判断中心点是否和不可通过的地图块碰撞了
 	bool IsMapTouch(vector<vector<char>> mapData, float bgW, float bgH, float minMapSize);
-	//判断物体是X轴还是Y轴和不可通过的地图块碰撞了(0:no 1:X 2:Y)
-	int IsXYMapTouch(vector<vector<char>> mapData, float bgW, float bgH, float minMapSize);
 };
 
 class Emitter :
@@ -60,8 +56,6 @@ public:
 		playerJump,
 		enemyHurtL,
 		enemyHurtR,
-		bulletShellL,
-		bulletShellR,
 	}_particleType;
 
 	Vector2 _pos;

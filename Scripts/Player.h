@@ -39,6 +39,9 @@ public:
 	bool _isGod;//是否处于无敌状态
 	bool _isDead;
 
+	Vector2 _gunPos;
+	float _gunSpeedX;
+
 	Player();
 	void Initial();
 	void Move(char prekeys[], char keys[], vector<vector<char>> mapData, float bgW, float bgH, float minMapSize);

@@ -66,7 +66,7 @@ void Particle::Inital(Vector2 pos, TYPE type)
 		_dir.y = dis_dirY(gen);
 		_radius = 3;
 		_color = 0xab47bcff;
-		std::uniform_int_distribution dis_life(40, 60);
+		std::uniform_int_distribution dis_life(100, 120);
 		_lifeTime = dis_life(gen);
 		break; }
 	case bulletShellL:
@@ -76,9 +76,9 @@ void Particle::Inital(Vector2 pos, TYPE type)
 		_dir.x = _type == bulletShellL ? 1.f : -1.f;
 		std::uniform_real_distribution dis_dirY(1.f, 2.f);
 		_dir.y = dis_dirY(gen);
-		_radius = 8;
+		_radius = 4;
 		std::uniform_real_distribution dis_angle(-10.f, 10.f);
-		//_angle = dis_angle(gen);
+		_angle = dis_angle(gen);
 		_color = WHITE;
 		_lifeTime = 240;
 		break; }
@@ -153,30 +153,63 @@ void Particle::Move(vector<vector<char>> mapData, float bgW, float bgH, float mi
 		break; }
 	case bulletShellL:
 	case bulletShellR: {
+		float bounce = 0.6f;
+		float gravity = 0.5f;
+		Vector2 backupPos = { _pos.x,_pos.y };
+
 		_acc.x = _dir.x * _speed;
-		_acc.y = _dir.y * _speed;
 		if (_currentTime < 10) {
 			_vel.x += _acc.x;
+		}
+		_pos.x += _vel.x;
+
+		int checkUp = (int)((bgH - _pos.y - _radius) / minMapSize);
+		int checkDown = (int)((bgH - _pos.y + _radius - 1) / minMapSize);
+		int checkLeft = (int)((_pos.x - _radius) / minMapSize);
+		int checkRight = (int)((_pos.x + _radius - 1) / minMapSize);
+		if (_vel.x > 0) {
+			if (!Map::IsThrough(mapData, checkUp, checkRight)
+				|| !Map::IsThrough(mapData, checkDown, checkRight)) {
+				_pos.x = backupPos.x;
+				_vel.x *= -bounce;
+			}
+		}
+		else if (_vel.x < 0) {
+			if (!Map::IsThrough(mapData, checkUp, checkLeft)
+				|| !Map::IsThrough(mapData, checkDown, checkLeft)) {
+				_pos.x = backupPos.x;
+				_vel.x *= -bounce;
+			}
+		}
+
+
+		_acc.y = _dir.y * _speed;
+		if (_currentTime < 10) {
 			_vel.y += _acc.y;
 		}
-		_vel.y -= 0.5f;
-		int checkUp = (int)((bgH - _pos.y - 9) / minMapSize);
-		int checkDown = (int)((bgH - _pos.y + 9 - 1) / minMapSize);
-		int checkLeft = (int)((_pos.x - 7) / minMapSize);
-		int checkRight = (int)((_pos.x + 7 - 1) / minMapSize);
-		if (!Map::IsThrough(mapData, checkUp, checkRight)
-			&& !Map::IsThrough(mapData, checkDown, checkRight)
-			|| !Map::IsThrough(mapData, checkUp, checkLeft)
-			&& !Map::IsThrough(mapData, checkDown, checkLeft)) {
-			_vel.x *= -0.5f;
+		_vel.y -= gravity;
+		_pos.y += _vel.y;
+
+		checkUp = (int)((bgH - _pos.y - _radius) / minMapSize);
+		checkDown = (int)((bgH - _pos.y + _radius - 1) / minMapSize);
+		checkLeft = (int)((_pos.x - _radius) / minMapSize);
+		checkRight = (int)((_pos.x + _radius - 1) / minMapSize);
+		if (_vel.y > 0) {
+			if (!Map::IsThrough(mapData, checkUp, checkLeft)
+				|| !Map::IsThrough(mapData, checkUp, checkRight)) {
+				_pos.y = backupPos.y;
+				_vel.x *= bounce;
+				_vel.y *= -bounce;
+			}
 		}
-		else if (!Map::IsThrough(mapData, checkUp, checkLeft)
-			&& !Map::IsThrough(mapData, checkUp, checkRight)
-			|| !Map::IsThrough(mapData, checkDown, checkLeft)
-			&& !Map::IsThrough(mapData, checkDown, checkRight)) {
-			_vel.y *= -0.5f;
+		else if (_vel.y < 0) {
+			if (!Map::IsThrough(mapData, checkDown, checkLeft)
+				|| !Map::IsThrough(mapData, checkDown, checkRight)) {
+				_pos.y = backupPos.y;
+				_vel.x *= bounce;
+				_vel.y *= -bounce;
+			}
 		}
-		_pos = { _pos.x + _vel.x,_pos.y + _vel.y };
 		break; }
 	}
 

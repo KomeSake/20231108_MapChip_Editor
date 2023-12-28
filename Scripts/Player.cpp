@@ -32,6 +32,9 @@ void Player::Initial()
 	_isLeft = false;
 	_isGod = false;
 	_isDead = false;
+
+	_gunPos = { 0,-4 };
+	_gunSpeedX = 2;
 }
 
 void Player::Move(char prekeys[], char keys[], vector<vector<char>> mapData, float bgW, float bgH, float minMapSize)
@@ -219,6 +222,14 @@ void Player::Attack()
 				ParticleManager::ADD_Particle(_pos.x + gunFireLength - 40, _pos.y + dis_moveY(rd), Emitter::bulletShellR);
 			}
 		}
+		//Gun
+		if (_gunPos.x > 5 || _gunPos.x < -5) {
+			_gunSpeedX *= -1;
+		}
+		_gunPos.x += _gunSpeedX;
+	}
+	else {
+		_gunPos.x = 0;
 	}
 }
 
@@ -247,6 +258,9 @@ void Player::Show()
 			FrameAnimation(_pos.x, _pos.y, LoadRes::_sl_playerRun_L, _rad, _color, 100, 0);
 		}
 	}
+
+	//Gun
+	FrameTexture(_pos.x + _gunPos.x, _pos.y + _gunPos.y, LoadRes::_sp_Gun, WHITE);
 }
 
 void Player::Dead()

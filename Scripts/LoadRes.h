@@ -34,6 +34,7 @@ public:
 	//Bullet
 	inline static Sprite _sp_Bullet;
 	inline static Sprite _sp_BulletShell;
+	inline static Sprite _sp_Gun;
 
 	//Enemy
 	inline static Sprite _sp_EnemyMother;

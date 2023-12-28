@@ -138,21 +138,26 @@ void Particle::Move(vector<vector<char>> mapData, float bgW, float bgH, float mi
 			_vel.y += _acc.y;
 		}
 		_vel.y -= 0.5f;
-		int checkUp = (int)((bgH - _pos.y - _radius) / minMapSize);
-		int checkDown = (int)((bgH - _pos.y + _radius - 1) / minMapSize);
-		int checkLeft = (int)((_pos.x - _radius) / minMapSize);
-		int checkRight = (int)((_pos.x + _radius - 1) / minMapSize);
-		if (!Map::IsThrough(mapData, checkUp, checkRight)
-			&& !Map::IsThrough(mapData, checkDown, checkRight)
-			|| !Map::IsThrough(mapData, checkUp, checkLeft)
-			&& !Map::IsThrough(mapData, checkDown, checkLeft)) {
-			_scale.y += 0.1f;
-		}
-		else if (!Map::IsThrough(mapData, checkUp, checkLeft)
-			&& !Map::IsThrough(mapData, checkUp, checkRight)
-			|| !Map::IsThrough(mapData, checkDown, checkLeft)
-			&& !Map::IsThrough(mapData, checkDown, checkRight)) {
+		switch (IsXYMapTouch(
+			mapData, bgW, bgH, minMapSize)) {
+		case 0:
+			_pos = { _pos.x + _vel.x,_pos.y + _vel.y };
+			break;
+		case 1:
 			_scale.x += 0.1f;
+			break;
+		case 2:
+			_scale.y += 0.1f;
+			break;
+		}
+		break; }
+	case bulletShellL:
+	case bulletShellR: {
+		_acc.x = _dir.x * _speed;
+		_acc.y = _dir.y * _speed;
+		if (_currentTime < 10) {
+			_vel.x += _acc.x;
+			_vel.y += _acc.y;
 		}
 		_vel.y -= 0.5f;
 		int checkUp = (int)((bgH - _pos.y - 9) / minMapSize);
@@ -171,6 +176,7 @@ void Particle::Move(vector<vector<char>> mapData, float bgW, float bgH, float mi
 			&& !Map::IsThrough(mapData, checkDown, checkRight)) {
 			_vel.y *= -0.5f;
 		}
+		_pos = { _pos.x + _vel.x,_pos.y + _vel.y };
 		break; }
 	}
 
@@ -189,6 +195,10 @@ void Particle::Show()
 	case enemyHurtL:
 	case enemyHurtR:
 		Novice::DrawEllipse(int(screenPos.x), int(screenPos.y), int(_radius * _scale.x), int(_radius * _scale.y), _angle, _color, kFillModeSolid);
+		break;
+	case bulletShellL:
+	case bulletShellR:
+		FrameTexture(_pos.x, _pos.y, _sprite, _scale.x, _scale.y, _angle, _color);
 		break;
 	}
 }
@@ -215,6 +225,30 @@ bool Particle::IsMapTouch(vector<vector<char>> mapData, float bgW, float bgH, fl
 	}
 	else {
 		return true;
+	}
+}
+
+int Particle::IsXYMapTouch(vector<vector<char>> mapData, float bgW, float bgH, float minMapSize)
+{
+	bgW;
+	int checkUp = (int)((bgH - _pos.y - _radius) / minMapSize);
+	int checkDown = (int)((bgH - _pos.y + _radius - 1) / minMapSize);
+	int checkLeft = (int)((_pos.x - _radius) / minMapSize);
+	int checkRight = (int)((_pos.x + _radius - 1) / minMapSize);
+	if (!Map::IsThrough(mapData, checkUp, checkRight)
+		&& !Map::IsThrough(mapData, checkDown, checkRight)
+		|| !Map::IsThrough(mapData, checkUp, checkLeft)
+		&& !Map::IsThrough(mapData, checkDown, checkLeft)) {
+		return 2;
+	}
+	else if (!Map::IsThrough(mapData, checkUp, checkLeft)
+		&& !Map::IsThrough(mapData, checkUp, checkRight)
+		|| !Map::IsThrough(mapData, checkDown, checkLeft)
+		&& !Map::IsThrough(mapData, checkDown, checkRight)) {
+		return 1;
+	}
+	else {
+		return 0;
 	}
 }
 
@@ -260,6 +294,12 @@ void Emitter::Inital(Vector2 pos, TYPE type)
 		_height = 5;
 		_particleSum = 1;
 		break;
+	case bulletShellL:
+	case bulletShellR:
+		_width = 5;
+		_height = 5;
+		_particleSum = 1;
+		break;
 	}
 }
 
@@ -271,7 +311,6 @@ void Emitter::ParticleStart()
 	std::uniform_real_distribution disY(-_height / 2, _height / 2);
 	Vector2 randomPos{};
 	Particle* element{};
-
 
 	if (_particleCurrentTime == 0) {
 		for (int i = 0; i < _particleSum; i++) {
@@ -296,6 +335,14 @@ void Emitter::ParticleStart()
 				break;
 			case enemyHurtR:
 				element = ParticleManager::AcquireParticle(randomPos, Particle::enemyHurtR);
+				element->Instantiated();
+				break;
+			case bulletShellL:
+				element = ParticleManager::AcquireParticle(randomPos, Particle::bulletShellL);
+				element->Instantiated();
+				break;
+			case bulletShellR:
+				element = ParticleManager::AcquireParticle(randomPos, Particle::bulletShellR);
 				element->Instantiated();
 				break;
 			}

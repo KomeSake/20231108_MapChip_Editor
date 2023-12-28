@@ -78,7 +78,7 @@ void Particle::Inital(Vector2 pos, TYPE type)
 		_dir.y = dis_dirY(gen);
 		_radius = 8;
 		std::uniform_real_distribution dis_angle(-10.f, 10.f);
-		_angle = dis_angle(gen);
+		//_angle = dis_angle(gen);
 		_color = WHITE;
 		_lifeTime = 240;
 		break; }
@@ -160,14 +160,21 @@ void Particle::Move(vector<vector<char>> mapData, float bgW, float bgH, float mi
 			_vel.y += _acc.y;
 		}
 		_vel.y -= 0.5f;
-		switch (IsXYMapTouch(
-			mapData, bgW, bgH, minMapSize)) {
-		case 1:
-			_vel.x *= -1;
-			break;
-		case 2:
-			_vel.y *= -1;
-			break;
+		int checkUp = (int)((bgH - _pos.y - 9) / minMapSize);
+		int checkDown = (int)((bgH - _pos.y + 9 - 1) / minMapSize);
+		int checkLeft = (int)((_pos.x - 7) / minMapSize);
+		int checkRight = (int)((_pos.x + 7 - 1) / minMapSize);
+		if (!Map::IsThrough(mapData, checkUp, checkRight)
+			&& !Map::IsThrough(mapData, checkDown, checkRight)
+			|| !Map::IsThrough(mapData, checkUp, checkLeft)
+			&& !Map::IsThrough(mapData, checkDown, checkLeft)) {
+			_vel.x *= -0.5f;
+		}
+		else if (!Map::IsThrough(mapData, checkUp, checkLeft)
+			&& !Map::IsThrough(mapData, checkUp, checkRight)
+			|| !Map::IsThrough(mapData, checkDown, checkLeft)
+			&& !Map::IsThrough(mapData, checkDown, checkRight)) {
+			_vel.y *= -0.5f;
 		}
 		_pos = { _pos.x + _vel.x,_pos.y + _vel.y };
 		break; }

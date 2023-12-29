@@ -67,7 +67,7 @@ void Particle::Inital(Vector2 pos, TYPE type)
 		std::uniform_real_distribution dis_dirY(-0.5f, 2.f);
 		_dir.y = dis_dirY(gen);
 		_radius = 3;
-		_color = 0xab47bcff;
+		_color = 0xce93d8ff;
 		std::uniform_int_distribution dis_life(100, 120);
 		_lifeTime = dis_life(gen);
 		break; }
@@ -95,6 +95,16 @@ void Particle::Inital(Vector2 pos, TYPE type)
 		std::uniform_real_distribution dis_scale(1.f, 2.f);
 		_scale = { dis_scale(rd),dis_scale(rd) };
 		std::uniform_int_distribution dis_life(5, 10);
+		_lifeTime = dis_life(gen);
+		break; }
+	case playerHurt: {
+		_speed = 0.5f;
+		std::uniform_real_distribution dis_dirX(-1.f, 1.f);
+		std::uniform_real_distribution dis_dirY(-0.5f, 2.f);
+		_dir = { dis_dirX(gen), dis_dirY(gen) };
+		_radius = 3;
+		_color = 0xe51c23ff;
+		std::uniform_int_distribution dis_life(100, 120);
 		_lifeTime = dis_life(gen);
 		break; }
 	}
@@ -152,7 +162,7 @@ void Particle::Move(vector<vector<char>> mapData, float bgW, float bgH, float mi
 	case enemyHurtL:
 	case enemyHurtR: {
 		if (_alphaValue > 5 && _currentTime > _lifeTime - 30) {
-			_color = 0xab47bc00 | _alphaValue << 0;
+			_color = 0xce93d800 | _alphaValue << 0;
 			_alphaValue -= 5;
 		}
 
@@ -259,6 +269,32 @@ void Particle::Move(vector<vector<char>> mapData, float bgW, float bgH, float mi
 		_scale.x += 0.02f;
 		_scale.y += 0.02f;
 		break; }
+	case playerHurt: {
+		if (_alphaValue > 5 && _currentTime > _lifeTime - 30) {
+			_color = 0xe51c2300 | _alphaValue << 0;
+			_alphaValue -= 5;
+		}
+
+		_acc.x = _dir.x * _speed;
+		_acc.y = _dir.y * _speed;
+		if (_currentTime < 10) {
+			_vel.x += _acc.x;
+			_vel.y += _acc.y;
+		}
+		_vel.y -= 0.5f;
+		switch (IsXYMapTouch(
+			mapData, bgW, bgH, minMapSize)) {
+		case 0:
+			_pos = { _pos.x + _vel.x,_pos.y + _vel.y };
+			break;
+		case 1:
+			_scale.x += 0.1f;
+			break;
+		case 2:
+			_scale.y += 0.05f;
+			break;
+		}
+		break; }
 	}
 
 	_currentTime++;
@@ -277,6 +313,7 @@ void Particle::Show()
 	case enemyHurtR:
 	case playerRunL:
 	case playerRunR:
+	case playerHurt:
 		Novice::DrawEllipse(int(screenPos.x), int(screenPos.y), int(_radius * _scale.x), int(_radius * _scale.y), _angle, _color, kFillModeSolid);
 		break;
 	case bulletShellL:
@@ -375,7 +412,7 @@ void Emitter::Inital(Vector2 pos, TYPE type)
 	case enemyHurtR:
 		_width = 5;
 		_height = 5;
-		_particleSum = 1;
+		_particleSum = 2;
 		break;
 	case bulletShellL:
 	case bulletShellR:
@@ -390,6 +427,10 @@ void Emitter::Inital(Vector2 pos, TYPE type)
 		_height = 10;
 		_particleSum = 1;
 		break;
+	case playerHurt:
+		_width = 5;
+		_height = 5;
+		_particleSum = 5;
 	}
 }
 
@@ -441,6 +482,10 @@ void Emitter::ParticleStart()
 				break;
 			case playerRunR:
 				element = ParticleManager::AcquireParticle(randomPos, Particle::playerRunR);
+				element->Instantiated();
+				break;
+			case playerHurt:
+				element = ParticleManager::AcquireParticle(randomPos, Particle::playerHurt);
 				element->Instantiated();
 				break;
 			}

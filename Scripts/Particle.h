@@ -19,6 +19,8 @@ public:
 		bulletShellR,
 		playerRunL,
 		playerRunR,
+		playerHurt,
+		enemyDead,
 	}_particleType;
 
 	Vector2 _pos;
@@ -68,6 +70,8 @@ public:
 		bulletShellR,
 		playerRunL,
 		playerRunR,
+		playerHurt,
+		enemyDead,
 	}_particleType;
 
 	Vector2 _pos;

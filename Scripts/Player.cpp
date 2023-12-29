@@ -188,6 +188,7 @@ void Player::Collide()
 					_color = RED;
 					_isGod = true;
 					Novice::PlayAudio(LoadRes::_audio_playerDamage, 0, 1);
+					ParticleManager::ADD_Particle(_pos.x, _pos.y, Emitter::playerHurt);
 					break;
 				}
 			}
